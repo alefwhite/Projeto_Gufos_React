@@ -1,0 +1,11 @@
+1 - Instalação do react com NPM
+ npm install -g create-react-app
+
+2 - Criação da aplicação padrão do react
+create-react-app nome_da_pasta ou npx create-react-app nome_da_pasta
+
+3- Para iniciar a aplicação com npm
+npm start
+
+4 - Instalar o pacote de rotas e importar para poder utilizar
+npm install --save react-router-dom
