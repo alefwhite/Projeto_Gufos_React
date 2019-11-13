@@ -1,0 +1,13 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+footer {
+    width: 100%;
+    background-color: #FF0909;
+    text-align: center;
+    color:#FFFFFF;
+    font-family: arial;
+    padding: 35px 0;
+}
