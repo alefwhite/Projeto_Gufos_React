@@ -10,6 +10,8 @@ import Categorias from './assets/pages/Categorias/Categorias';
 import {Route, BrowserRouter as Router, Switch} from 'react-router-dom';
 // Caso o usuario acesse alguma url não existente
 import NotFound from './assets/pages/NotFound/Notfound';
+import Eventos from './assets/pages/Eventos/Eventos';
+import Login from './assets/pages/Login/Login';
 
 
 // Router renderiza a Url / Route cria a rota
@@ -21,6 +23,8 @@ const Rotas = (
             <Switch>
                 <Route exact path="/" component={App}/>
                 <Route path="/categorias" component={Categorias}/>
+                <Route path="/eventos" component={Eventos}/>
+                <Route path="/login" component={Login}/>
                 <Route component={NotFound}/>
             </Switch>
         </div>

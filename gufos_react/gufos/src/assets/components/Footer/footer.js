@@ -2,7 +2,13 @@ import React from 'react';
 
 function Footer() {
     return (
-        <footer>Escola SENAI de Infomática</footer>
+        <footer class="rodapePrincipal">
+            <section class="rodapePrincipal-patrocinadores">
+                <div class="container">
+                    <p>Escola SENAI de Informática - 2019</p>
+                </div>
+            </section>
+        </footer>
     );
 }
 
