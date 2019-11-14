@@ -7,16 +7,30 @@ class Categorias extends Component {
 
     constructor(props) {
         super(props);
+
+        this.state =
+        {
+            lista : [
+                {idCategoria : 1, titulo : "Show"},
+                {idCategoria : 2, titulo : "Meetup"},
+                {idCategoria : 3, titulo : "Hackathon"},
+                {idCategoria : 4, titulo : "WorkShop"},
+            ]
+        }
+
+
     }
 
     // Antes de carregar nosso Dom
     UNSAFE_componentWillMount() {
+        document.title = this.props.titulo_pagina;
         console.log("Carregando...");
     }
 
     // Após renderizar o componente
     componentDidMount() {
         console.log("Carregado...");
+        console.log(this.state.lista);
     }
 
     // Quando a uma atualização no componente
@@ -32,6 +46,9 @@ class Categorias extends Component {
     
 
     render() {
+
+        let ano = "2018";
+
         return (
             <div>
                 <main className="conteudoPrincipal">
@@ -46,7 +63,18 @@ class Categorias extends Component {
                                         <th>Título</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tabela-lista-corpo"></tbody>
+                                <tbody id="tabela-lista-corpo">
+                                    {
+                                        this.state.lista.map(function(categoria){
+                                            return (
+                                                <tr key={categoria.idCategoria}>
+                                                    <td>{categoria.idCategoria}</td>
+                                                    <td>{categoria.titulo}</td>       
+                                                </tr>    
+                                            )
+                                        })
+                                    }
+                                </tbody>
                             </table>
                         </div>
                         <div className="container" id="conteudoPrincipal-cadastro">
@@ -60,7 +88,7 @@ class Categorias extends Component {
                         </div>
                     </section>
                 </main>
-                <Footer/>
+                <Footer ano={ano}/>
             </div>
         );
     }
