@@ -5,15 +5,31 @@ import {Link} from 'react-router-dom';
 
 class Categorias extends Component {
 
+    constructor(props) {
+        super(props);
+    }
+
     // Antes de carregar nosso Dom
     UNSAFE_componentWillMount() {
         console.log("Carregando...");
     }
 
-    // Após renderizar o component
+    // Após renderizar o componente
     componentDidMount() {
         console.log("Carregado...");
     }
+
+    // Quando a uma atualização no componente
+    componentDidUpdate() {
+        console.log("Atualizando...");
+    }
+
+    // Quando sai da página ele mata o componente
+    componentWillUnmount() {
+        console.log("Saindo.....");
+    }
+
+    
 
     render() {
         return (
