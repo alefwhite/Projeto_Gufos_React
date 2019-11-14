@@ -10,15 +10,11 @@ class Categorias extends Component {
 
         this.state =
         {
-            lista : [
-                {idCategoria : 1, titulo : "Show"},
-                {idCategoria : 2, titulo : "Meetup"},
-                {idCategoria : 3, titulo : "Hackathon"},
-                {idCategoria : 4, titulo : "WorkShop"},
-            ]
+            lista : [],
+            nome  : ""
         }
 
-
+        this.CadastrarCategoria = this.CadastrarCategoria.bind(this);
     }
 
     // Antes de carregar nosso Dom
@@ -30,7 +26,8 @@ class Categorias extends Component {
     // Após renderizar o componente
     componentDidMount() {
         console.log("Carregado...");
-        console.log(this.state.lista);
+        this.ListaAtualizada();
+        //console.log(this.state.lista);
     }
 
     // Quando a uma atualização no componente
@@ -42,7 +39,39 @@ class Categorias extends Component {
     componentWillUnmount() {
         console.log("Saindo.....");
     }
+    
+    ListaAtualizada = () => {
+        fetch("http://localhost:5000/api/categoria")
+        .then(response => response.json())
+        .then(data => this.setState({lista : data}))
+        .catch(error => console.log(error));
+    }
 
+    CadastrarCategoria(event) {
+        event.preventDefault();
+        console.log("Cadastrando");
+        console.log(this.state.nome);
+
+        fetch("http://localhost:5000/api/categoria", {
+            method : "POST",
+            headers : {
+                "Content-Type" : "application/json"
+            },
+            body : JSON.stringify({titulo : this.state.nome})
+        })
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+            this.ListaAtualizada();
+            //this.setState( () => ({ lista : this.state.lista}))
+        })
+        .catch(error => console.log(error));
+
+    }
+
+    AtualizaNome(input) {
+        this.setState({nome : input.target.value});
+    }
     
 
     render() {
@@ -67,8 +96,8 @@ class Categorias extends Component {
                                     {
                                         this.state.lista.map(function(categoria){
                                             return (
-                                                <tr key={categoria.idCategoria}>
-                                                    <td>{categoria.idCategoria}</td>
+                                                <tr key={categoria.categoriaId}>
+                                                    <td>{categoria.categoriaId}</td>
                                                     <td>{categoria.titulo}</td>       
                                                 </tr>    
                                             )
@@ -79,9 +108,9 @@ class Categorias extends Component {
                         </div>
                         <div className="container" id="conteudoPrincipal-cadastro">
                             <h2 className="conteudoPrincipal-cadastro-titulo">Cadastrar Tipo de Evento</h2>
-                            <form>
+                            <form onSubmit={this.CadastrarCategoria}>
                                 <div className="container">
-                                    <input type="text" id="nome-tipo-evento" placeholder="tipo do evento"/>
+                                    <input type="text" id="nome-tipo-evento" placeholder="tipo do evento" value={this.state.nome} onChange={this.AtualizaNome.bind(this)}/>
                                     <button className="conteudoPrincipal-btn conteudoPrincipal-btn-cadastro">Cadastrar</button>
                                 </div>
                             </form>
