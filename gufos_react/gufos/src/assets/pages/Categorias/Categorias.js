@@ -7,7 +7,12 @@ class Categorias extends Component {
 
     // Antes de carregar nosso Dom
     UNSAFE_componentWillMount() {
-        console.log("carregando...");
+        console.log("Carregando...");
+    }
+
+    // Após renderizar o component
+    componentDidMount() {
+        console.log("Carregado...");
     }
 
     render() {
