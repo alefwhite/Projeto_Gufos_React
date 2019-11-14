@@ -11,7 +11,7 @@ class Login extends Component {
                     <div className="item__login">
                         <div className="row">
                             <div className="item">
-                                <img src="./assets/img/icon-login.png" className="icone__login" />
+                                <img src="./assets/img/icon-login.png" className="icone__login" alt="teste"/>
                             </div>
                             <div className="item" id="item__title">
                                 <p className="text__login" id="item__description">

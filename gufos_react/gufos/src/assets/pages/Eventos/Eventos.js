@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Footer from '../../components/Footer/footer';
+import Footer from '../../components/Footer/Footer';
 
 class Eventos extends Component {
 
