@@ -13,6 +13,15 @@ import NotFound from './assets/pages/NotFound/Notfound';
 import Eventos from './assets/pages/Eventos/Eventos';
 import Login from './assets/pages/Login/Login';
 
+// Importamos nosso css padrão
+import './assets/css/flexbox.css'
+import './assets/css/reset.css'
+import './assets/css/style.css'
+
+// Importamos o MDB React
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import 'bootstrap-css-only/css/bootstrap.min.css';
+import 'mdbreact/dist/css/mdb.css';
 
 // Router renderiza a Url / Route cria a rota
 // Realizar  a criação da rotas

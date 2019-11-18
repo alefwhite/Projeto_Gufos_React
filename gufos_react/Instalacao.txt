@@ -1,4 +1,4 @@
-1 - Instalação do react com NPM
+﻿1 - Instalação do react com NPM
  npm install -g create-react-app
 
 2 - Criação da aplicação padrão do react
@@ -9,3 +9,15 @@ npm start
 
 4 - Instalar o pacote de rotas e importar para poder utilizar
 npm install --save react-router-dom
+
+
+
+Loanding
+
+Material Design Bootstrap React // Se o projeto ja existir npm install --save mdbreact
+https://material.io/design/
+https://mdbootstrap.com/docs/react/getting-started/quick-start/
+
+Mensagens de Erro
+
+FontAwesome
