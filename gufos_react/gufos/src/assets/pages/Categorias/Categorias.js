@@ -16,7 +16,7 @@ class Categorias extends Component {
                 lista: [],// Definimos uma lista vazia inicial
                 nome: "", // Recebe o valor do input do form de cadastro
                 modal: false,
-                editarModal : {
+                editarModal : { // Usamos para armazenar os dados para serem alterados
                     categoriaId : "",
                     titulo : ""
                 }
@@ -92,6 +92,7 @@ class Categorias extends Component {
         this.setState({ nome: input.target.value });
     }
 
+    //  DELETE - Deletar Categoria
     DeletarCategoria = (id) => {
         console.log("Excluindo...");
 
@@ -109,6 +110,7 @@ class Categorias extends Component {
         .catch(error => console.log(error));
     }
 
+    // Acionado quando clicarmos no botão editar para capturar e salvar no state os dados atuais
     AlterarCategoria = (categoria) => {
         console.log(categoria);
 
@@ -123,7 +125,9 @@ class Categorias extends Component {
         this.toggle();
     }
 
+    // UPDATE - Atualiza a categoria
     SalvarAlteracoes = (event) => {
+        // Previne que a pagina seja carregada
         event.preventDefault();
 
         let id = this.state.editarModal.categoriaId;
@@ -138,6 +142,7 @@ class Categorias extends Component {
         .then(response => response.json())
         .catch(error => console.log(error));
         
+        // Atraso na requisição, pois as respostas possuem intervalos muito próximos
         setTimeout(() => {
             this.ListaAtualizada();                
         }, 500);
@@ -146,6 +151,7 @@ class Categorias extends Component {
         this.toggle();
     } 
 
+    // Utilizamos para atualizar os states dos inputs
     AtualizaEditarModalTitulo = (input) => {
         this.setState({editarModal : {
             categoriaId : this.state.editarModal.categoriaId,
@@ -200,8 +206,10 @@ class Categorias extends Component {
                                     <button className="conteudoPrincipal-btn conteudoPrincipal-btn-cadastro">Cadastrar</button>
                                 </div>
                             </form>
+                            {/* Utilizamos o Modal da biblioteca para fazer o Update */}
                             <MDBContainer>
                                 {/* <MDBBtn onClick={this.toggle}>Modal</MDBBtn> */}
+                                {/* Abraçamos os Inputs do container com um form */}
                                 <form onSubmit={this.SalvarAlteracoes}>
                                     <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
                                     <MDBModalHeader toggle={this.toggle}>Editar - {this.state.editarModal.titulo}</MDBModalHeader>
@@ -227,6 +235,7 @@ class Categorias extends Component {
                                         </MDBModalBody>
                                         <MDBModalFooter>
                                             <MDBBtn color="secondary" onClick={this.toggle}>Fechar</MDBBtn>
+                                            {/* Incluimos o type submit para poder enviar os dados do modal */}
                                             <MDBBtn color="primary" type="submit">Salvar</MDBBtn>
                                         </MDBModalFooter>
                                     </MDBModal>
