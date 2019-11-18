@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Footer from '../../components/Footer/Footer';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBInput} from 'mdbreact';
 // Link vai ser usado no lugar href do html pq ele é mais robusto.
 //import {Link} from 'react-router-dom';
 
@@ -13,7 +13,11 @@ class Categorias extends Component {
             {
                 lista: [],
                 nome: "",
-                modal: false
+                modal: false,
+                editarModal : {
+                    categoriaId : "",
+                    titulo : ""
+                }
             }
 
         this.CadastrarCategoria = this.CadastrarCategoria.bind(this);
@@ -96,6 +100,20 @@ class Categorias extends Component {
             .catch(error => console.log(error));
     }
 
+    AlterarCategoria = (categoria) => {
+        console.log(categoria);
+
+        this.setState({
+            editarModal : {
+                categoriaId : categoria.categoriaId,
+                titulo : categoria.titulo
+            }
+        });
+
+        // Abrir Modal
+        this.toggle();
+    }
+
     AtualizaNome(input) {
         this.setState({ nome: input.target.value });
     }
@@ -128,6 +146,7 @@ class Categorias extends Component {
                                                     <td>{categoria.categoriaId}</td>
                                                     <td>{categoria.titulo}</td>
                                                     <td>
+                                                        <button onClick={e => this.AlterarCategoria(categoria)}>Alterar</button>
                                                         <button onClick={e => this.DeletarCategoria(categoria.categoriaId)}>Excluir</button>
                                                     </td>
                                                 </tr>
@@ -146,15 +165,15 @@ class Categorias extends Component {
                                 </div>
                             </form>
                             <MDBContainer>
-                                <MDBBtn onClick={this.toggle}>Modal</MDBBtn>
+                                {/* <MDBBtn onClick={this.toggle}>Modal</MDBBtn> */}
                                 <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
-                                    <MDBModalHeader toggle={this.toggle}>MDBModal title</MDBModalHeader>
+                                <MDBModalHeader toggle={this.toggle}>Editar - {this.state.editarModal.titulo}</MDBModalHeader>
                                     <MDBModalBody>
                                         (...)
                                     </MDBModalBody>
                                     <MDBModalFooter>
-                                        <MDBBtn color="secondary" onClick={this.toggle}>Close</MDBBtn>
-                                        <MDBBtn color="primary">Save changes</MDBBtn>
+                                        <MDBBtn color="secondary" onClick={this.toggle}>Fechar</MDBBtn>
+                                        <MDBBtn color="primary">Salvar</MDBBtn>
                                     </MDBModalFooter>
                                 </MDBModal>
                             </MDBContainer>
