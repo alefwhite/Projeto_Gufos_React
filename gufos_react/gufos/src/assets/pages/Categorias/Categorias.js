@@ -1,25 +1,28 @@
 import React, { Component } from 'react';
 import Footer from '../../components/Footer/Footer';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBInput} from 'mdbreact';
+// Import dos components da biblioteca Material Design
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter} from 'mdbreact'; // MDBInput
 // Link vai ser usado no lugar href do html pq ele é mais robusto.
 //import {Link} from 'react-router-dom';
 
 class Categorias extends Component {
 
     constructor(props) {
+        // Usado para poder manipular os states que são herdados de Component
         super(props);
 
         this.state =
             {
-                lista: [],
-                nome: "",
+                lista: [],// Definimos uma lista vazia inicial
+                nome: "", // Recebe o valor do input do form de cadastro
                 modal: false,
                 editarModal : {
                     categoriaId : "",
                     titulo : ""
                 }
             }
-
+        
+        // Damos o bind no caso quando não usamos Arrow Function
         this.CadastrarCategoria = this.CadastrarCategoria.bind(this);
     }
 
@@ -52,6 +55,7 @@ class Categorias extends Component {
         console.log("Saindo.....");
     }
 
+    // GET - Listar Categorias
     ListaAtualizada = () => {
         fetch("http://localhost:5000/api/categoria")
             .then(response => response.json())
@@ -59,8 +63,9 @@ class Categorias extends Component {
             .catch(error => console.log(error));
     }
 
+    // POST - Cadastrar Categoria
     CadastrarCategoria(event) {
-        event.preventDefault();
+        event.preventDefault(); // Inpede que a página seja carregada
         console.log("Cadastrando");
         console.log(this.state.nome);
 
@@ -71,16 +76,20 @@ class Categorias extends Component {
             },
             body: JSON.stringify({ titulo: this.state.nome })
         })
-            .then(response => response.json())
-            .then(response => {
-                console.log(response);
-                this.ListaAtualizada();
-                this.setState({ nome: '' })
-                document.getElementById("nome-tipo-evento").focus();
-                //this.setState( () => ({ lista : this.state.lista}))
-            })
-            .catch(error => console.log(error));
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+            this.ListaAtualizada();
+            this.setState({ nome: '' })
+            document.getElementById("nome-tipo-evento").focus();
+            //this.setState( () => ({ lista : this.state.lista}))
+        })
+        .catch(error => console.log(error));        
+    }  
 
+    // Utilizamos para poder alterar o input de cadastro
+    AtualizaNome(input) {
+        this.setState({ nome: input.target.value });
     }
 
     DeletarCategoria = (id) => {
@@ -92,12 +101,12 @@ class Categorias extends Component {
                 "Content-Type": "application/json"
             }
         })
-            .then(response => response.json())
-            .then(response => {
-                console.log(response);
-                this.ListaAtualizada();
-            })
-            .catch(error => console.log(error));
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+            this.ListaAtualizada();
+        })
+        .catch(error => console.log(error));
     }
 
     AlterarCategoria = (categoria) => {
@@ -114,10 +123,35 @@ class Categorias extends Component {
         this.toggle();
     }
 
-    AtualizaNome(input) {
-        this.setState({ nome: input.target.value });
-    }
+    SalvarAlteracoes = (event) => {
+        event.preventDefault();
 
+        let id = this.state.editarModal.categoriaId;
+
+        fetch(`http://localhost:5000/api/categoria/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(this.state.editarModal)
+        })
+        .then(response => response.json())
+        .catch(error => console.log(error));
+        
+        setTimeout(() => {
+            this.ListaAtualizada();                
+        }, 500);
+
+        // Fechar Modal
+        this.toggle();
+    } 
+
+    AtualizaEditarModalTitulo = (input) => {
+        this.setState({editarModal : {
+            categoriaId : this.state.editarModal.categoriaId,
+            titulo : input.target.value
+        }});
+    }
 
     render() {
 
@@ -139,9 +173,10 @@ class Categorias extends Component {
                                     </tr>
                                 </thead>
                                 <tbody id="tabela-lista-corpo">
-                                    {
+                                    {   // Percorrer a lista de categoria
                                         this.state.lista.map(function (categoria) {
                                             return (
+                                                // Colocamos uma Key pois cada linha em jsx precisa de um Id Unico
                                                 <tr key={categoria.categoriaId}>
                                                     <td>{categoria.categoriaId}</td>
                                                     <td>{categoria.titulo}</td>
@@ -151,6 +186,7 @@ class Categorias extends Component {
                                                     </td>
                                                 </tr>
                                             )
+                                        // Usamos para vincular todo o contexto do map
                                         }.bind(this))
                                     }
                                 </tbody>
@@ -166,16 +202,35 @@ class Categorias extends Component {
                             </form>
                             <MDBContainer>
                                 {/* <MDBBtn onClick={this.toggle}>Modal</MDBBtn> */}
-                                <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
-                                <MDBModalHeader toggle={this.toggle}>Editar - {this.state.editarModal.titulo}</MDBModalHeader>
-                                    <MDBModalBody>
-                                        (...)
-                                    </MDBModalBody>
-                                    <MDBModalFooter>
-                                        <MDBBtn color="secondary" onClick={this.toggle}>Fechar</MDBBtn>
-                                        <MDBBtn color="primary">Salvar</MDBBtn>
-                                    </MDBModalFooter>
-                                </MDBModal>
+                                <form onSubmit={this.SalvarAlteracoes}>
+                                    <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
+                                    <MDBModalHeader toggle={this.toggle}>Editar - {this.state.editarModal.titulo}</MDBModalHeader>
+                                        <MDBModalBody>
+                                            {/* <MDBInput
+                                                label="Categoria"
+                                                value={this.state.editarModal.titulo}
+                                                onChange={this.AtualizaEditarModalTitulo}
+                                            /> */}
+                                            <label
+                                                htmlFor="defaultFormCardNameEx"
+                                                className="grey-text font-weight-light"
+                                            >
+                                                Categoria        
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={this.state.editarModal.titulo}
+                                                onChange={this.AtualizaEditarModalTitulo}
+                                                id="defaultFormCardNameEx"
+                                                className="form-control"
+                                            />                                
+                                        </MDBModalBody>
+                                        <MDBModalFooter>
+                                            <MDBBtn color="secondary" onClick={this.toggle}>Fechar</MDBBtn>
+                                            <MDBBtn color="primary" type="submit">Salvar</MDBBtn>
+                                        </MDBModalFooter>
+                                    </MDBModal>
+                                </form>    
                             </MDBContainer>
                         </div>
                     </section>

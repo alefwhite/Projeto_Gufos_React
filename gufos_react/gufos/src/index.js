@@ -14,9 +14,10 @@ import Eventos from './assets/pages/Eventos/Eventos';
 import Login from './assets/pages/Login/Login';
 
 // Importamos nosso css padrão
-import './assets/css/flexbox.css'
-import './assets/css/reset.css'
-import './assets/css/style.css'
+import './assets/css/flexbox.css';
+import './assets/css/reset.css';
+import './assets/css/style.css';
+import './assets/css/rodape.css';
 
 // Importamos o MDB React
 import '@fortawesome/fontawesome-free/css/all.min.css';
