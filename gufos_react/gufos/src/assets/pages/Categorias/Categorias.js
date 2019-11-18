@@ -63,10 +63,29 @@ class Categorias extends Component {
         .then(response => {
             console.log(response);
             this.ListaAtualizada();
+            this.setState({ nome : ''})
+            document.getElementById("nome-tipo-evento").focus();
             //this.setState( () => ({ lista : this.state.lista}))
         })
         .catch(error => console.log(error));
 
+    }
+
+    DeletarCategoria = (id) => {
+        console.log("Excluindo...");
+
+        fetch(`http://localhost:5000/api/categoria/${id}`, {
+            method : "DELETE",
+            headers : {
+                "Content-Type" : "application/json"
+            }           
+        })
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+            this.ListaAtualizada();           
+        })
+        .catch(error => console.log(error));
     }
 
     AtualizaNome(input) {
@@ -90,6 +109,7 @@ class Categorias extends Component {
                                     <tr>
                                         <th>#</th>
                                         <th>Título</th>
+                                        <th>Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tabela-lista-corpo">
@@ -98,10 +118,13 @@ class Categorias extends Component {
                                             return (
                                                 <tr key={categoria.categoriaId}>
                                                     <td>{categoria.categoriaId}</td>
-                                                    <td>{categoria.titulo}</td>       
+                                                    <td>{categoria.titulo}</td>
+                                                    <td>
+                                                        <button onClick={e => this.DeletarCategoria(categoria.categoriaId)}>Excluir</button>
+                                                    </td>       
                                                 </tr>    
                                             )
-                                        })
+                                        }.bind(this))
                                     }
                                 </tbody>
                             </table>
