@@ -19,7 +19,9 @@ class Categorias extends Component {
                 editarModal : { // Usamos para armazenar os dados para serem alterados
                     categoriaId : "",
                     titulo : ""
-                }
+                },
+                loading : false, // Criando um estado para verificar carregamento                
+                erroMsg : ""
             }
         
         // Damos o bind no caso quando não usamos Arrow Function
@@ -57,10 +59,18 @@ class Categorias extends Component {
 
     // GET - Listar Categorias
     ListaAtualizada = () => {
+        // Habilitado o icone de carregando
+        this.setState({ loading : true });
+
         fetch("http://localhost:5000/api/categoria")
             .then(response => response.json())
             .then(data => this.setState({ lista: data }))
             .catch(error => console.log(error));
+        
+        // Desabilitada o icone de carregando após dois segundos
+        setTimeout(() => {
+            this.setState({ loading : false });    
+        }, 2300);    
     }
 
     // POST - Cadastrar Categoria
@@ -95,6 +105,8 @@ class Categorias extends Component {
     //  DELETE - Deletar Categoria
     DeletarCategoria = (id) => {
         console.log("Excluindo...");
+        
+        this.setState({ erroMsg : ""});
 
         fetch(`http://localhost:5000/api/categoria/${id}`, {
             method: "DELETE",
@@ -107,7 +119,10 @@ class Categorias extends Component {
             console.log(response);
             this.ListaAtualizada();
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+            console.log(error);
+            this.setState({ erroMsg : "Não é possível excluir está categoria, verifique se não há eventos que a utilizem!"});
+        });
     }
 
     // Acionado quando clicarmos no botão editar para capturar e salvar no state os dados atuais
@@ -197,6 +212,13 @@ class Categorias extends Component {
                                     }
                                 </tbody>
                             </table>
+
+                            {/* Verifica e caso haja uma mensagem de erro ele mostra abaixo da tabela */}
+                            { this.state.erroMsg && <div className="text-danger">{this.state.erroMsg}</div> }
+
+                            {/* Verifica seo estado de loanding está como true e mostra o icone de carregando */}
+                            { this.state.loading && <i className="fas fa-spinner fa-spin fa-4x blue-text"></i>}
+
                         </div>
                         <div className="container" id="conteudoPrincipal-cadastro">
                             <h2 className="conteudoPrincipal-cadastro-titulo">Cadastrar Tipo de Evento</h2>
