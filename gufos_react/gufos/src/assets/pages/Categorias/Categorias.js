@@ -11,11 +11,10 @@ class Categorias extends Component {
         // Usado para poder manipular os states que são herdados de Component
         super(props);
 
-        this.state =
-            {
-                lista: [],// Definimos uma lista vazia inicial
-                nome: "", // Recebe o valor do input do form de cadastro
-                modal: false,
+        this.state =  {
+                lista : [],// Definimos uma lista vazia inicial
+                nome : "", // Recebe o valor do input do form de cadastro
+                modal : false,
                 editarModal : { // Usamos para armazenar os dados para serem alterados
                     categoriaId : "",
                     titulo : ""
@@ -23,6 +22,7 @@ class Categorias extends Component {
                 loading : false, // Criando um estado para verificar carregamento                
                 erroMsg : ""
             }
+           
         
         // Damos o bind no caso quando não usamos Arrow Function
         this.CadastrarCategoria = this.CadastrarCategoria.bind(this);
