@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Footer from '../../components/Footer/Footer';
+import { MDBBtn } from "mdbreact";
 
 class Eventos extends Component {
     constructor(props) {
@@ -9,8 +10,14 @@ class Eventos extends Component {
         this.state =  {
                 lista : [],// Definimos uma lista vazia inicial
                 listaCategorias : [],
+                listaLocalizacao : [],
+
                 tituloEvento : "",
                 dataEvento : "",
+                acessoLivre : "",
+                tipoEvento : "",
+                localizacaoEvento : "",
+
                 loading : false, // Criando um estado para verificar carregamento                
                 erroMsg : ""
             }
@@ -36,6 +43,39 @@ class Eventos extends Component {
         }, 2300);    
     }
 
+    CadastrarEvento = (event) => {
+        event.preventDefault(); // Inpede que a página seja carregada
+        console.log("Cadastrando");      
+
+        fetch("http://localhost:5000/api/evento", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(
+                {             
+                    titulo : this.state.tituloEvento,
+                    categoriaId : this.state.tipoEvento,
+                    acessoLivre : this.state.acessoLivre ? true : false,
+                    dataEvento  : this.state.dataEvento,
+                    localizacaoId : this.state.localizacaoEvento
+                }
+            )
+        })
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+
+            this.ListarEventos();
+
+            this.setState({ novoEvento : ""});
+
+            document.getElementById("evento__titulo").focus();
+            //this.setState( () => ({ lista : this.state.lista}))
+        })
+        .catch(error => console.log(error));        
+    }
+
     ListarCategorias = () => {       
 
         fetch("http://localhost:5000/api/categoria")
@@ -47,6 +87,22 @@ class Eventos extends Component {
             .catch(error => console.log(error));       
     }
 
+    ListarLocalizacao = () => {       
+
+        fetch("http://localhost:5000/api/localizacao")
+            .then(response => response.json())
+            .then(data => {
+                this.setState({ listaLocalizacao : data });
+                console.log(data);
+             })
+            .catch(error => console.log(error));       
+    }      
+
+    // Atualiza estado generico.
+    AtualizaEstado = (event) => {
+        this.setState({ [event.target.name] : event.target.value });
+    }    
+   
 
     // Antes de carregar nosso Dom
     UNSAFE_componentWillMount() {
@@ -54,23 +110,12 @@ class Eventos extends Component {
         console.log("Carregando...");
     }
 
-    // Utilizamos para poder alterar o input de cadastro
-   AtualizaTituloEvento = (input) => {
-       this.setState({ tituloEvento: input.target.value });
-       console.log(this.state.tituloEvento);
-   }
-
-    // Utilizamos para poder alterar o input de cadastro
-   AtualizaTituloDataEvento = (input) => {
-       this.setState({ dataEvento: input.target.value });
-       console.log(this.state.dataEvento);
-   }
-    
     // Após renderizar o componente
     componentDidMount() {
         console.log("Carregado...");
         this.ListarEventos();
         this.ListarCategorias();
+        this.ListarLocalizacao();
         //console.log(this.state.lista);
     }
 
@@ -98,7 +143,7 @@ class Eventos extends Component {
                                         <th>Acesso Livre</th>
                                         <th>Tipo do Evento</th>
                                         <th>Localização</th>
-                                        <th>Ações</th>
+                                        <th colSpan="2">Ações</th>
                                     </tr>
                                     {   // Percorrer a lista de categoria
                                         this.state.lista.map(function (evento) {
@@ -109,11 +154,13 @@ class Eventos extends Component {
                                                     <td>{evento.titulo}</td>
                                                     <td>{new Intl.DateTimeFormat('pt-BR', options).format(Date.parse(evento.dataEvento))}</td>                                                   
                                                     <td>{evento.acessoLivre ? "Sim" : "Não"}</td>
-                                                    <td>{evento.categoria.titulo}</td>
-                                                    <td>{evento.localizacao.endereco}</td>
+                                                    <td>{evento.categoriaId ? evento.categoria.titulo : "Sem Titulo"}</td>
+                                                    <td>{evento.localizacaoId ? evento.localizacao.endereco : "Sem localização" }</td>
                                                     <td>
-                                                        <button>Alterar</button>
-                                                        <button>Excluir</button>
+                                                        <MDBBtn gradient="purple">Alterar</MDBBtn>
+                                                    </td>
+                                                    <td>
+                                                        <MDBBtn gradient="peach">Excluir</MDBBtn>
                                                     </td>
                                                 </tr>
                                             )
@@ -133,43 +180,59 @@ class Eventos extends Component {
                         </div>
                         <div className="container" id="conteudoPrincipal-cadastro">
                             <h2 className="conteudoPrincipal-cadastro-titulo">Cadastrar Evento</h2>
-                            <div className="container">
-                                <input
-                                type="text"
-                                id="evento__titulo"
-                                placeholder="Título do evento"
-                                value={this.state.tituloEvento}
-                                onChange={this.AtualizaTituloEvento}
-                                />
-                                <input 
-                                type="text" 
-                                id="evento__data" 
-                                placeholder="dd/MM/yyyy"
-                                value={this.state.dataEvento}
-                                onChange={this.AtualizaTituloDataEvento}
-                                
-                                />
-                                <select id="option__acessolivre">
-                                    <option value="1">Livre</option>
-                                    <option value="0">Restrito</option>
-                                </select>
-                                <select id="option__tipoevento">
-                                    <option value="0" selected disabled>Selecione Tipo do Evento</option>
-                                    {   // Percorrer a lista de Eventos
-                                        this.state.listaCategorias.map(function (categoria) {
-                                            return (
-                                                // Colocamos uma Key pois cada linha em jsx precisa de um Id Unico
-                                                <option key={categoria.categoriaId} value={categoria.categoriaId}>{categoria.titulo}</option>
-                                            )
-                                        // Usamos para vincular todo o contexto do map
-                                        })
-                                    }
-                                </select>
-                                                          
-                            </div>
-                            <button className="conteudoPrincipal-btn conteudoPrincipal-btn-cadastro">
-                                Cadastrar
-                            </button>
+                            <form onSubmit={this.CadastrarEvento}>
+                                <div className="container">
+                                    <input
+                                    type="text"
+                                    id="evento__titulo"
+                                    placeholder="Título do evento"
+                                    value={this.state.tituloEvento}
+                                    onChange={this.AtualizaEstado}
+                                    name="tituloEvento"
+                                    />
+                                    <input 
+                                    type="datetime-local" 
+                                    id="evento__data" 
+                                    placeholder="dd/MM/yyyy"
+                                    value={this.state.dataEvento}
+                                    name="dataEvento"
+                                    onChange={this.AtualizaEstado}
+                                    
+                                    />
+                                    <select id="option__acessolivre" className="browser-default custom-select" name="acessoLivre" onChange={this.AtualizaEstado}>
+                                        <option value="1">Livre</option>
+                                        <option value="0">Restrito</option>
+                                    </select>
+                                    <select id="option__tipoevento" className="browser-default custom-select" name="tipoEvento" onChange={this.AtualizaEstado}>
+                                        {/* <option value="0" selected disabled>Selecione Tipo do Evento</option> */}
+                                        {   // Percorrer a lista de Eventos
+                                            this.state.listaCategorias.map(function (categoria) {
+                                                return (
+                                                    // Colocamos uma Key pois cada linha em jsx precisa de um Id Unico
+                                                    <option key={categoria.categoriaId} value={categoria.categoriaId}>{categoria.titulo}</option>
+                                                )
+                                            // Usamos para vincular todo o contexto do map
+                                            })
+                                        }
+                                    </select>
+                                    <select id="option__localizacao" className="browser-default custom-select" name="localizacaoEvento" onChange={this.AtualizaEstado}>
+                                        {/* <option value="0" selected disabled>Selecione Tipo do Evento</option> */}
+                                        {   // Percorrer a lista de Eventos
+                                            this.state.listaLocalizacao.map(function (localizacao) {
+                                                return (
+                                                    // Colocamos uma Key pois cada linha em jsx precisa de um Id Unico
+                                                    <option key={localizacao.localizacaoId} value={localizacao.localizacaoId}>{localizacao.endereco}</option>
+                                                )
+                                            // Usamos para vincular todo o contexto do map
+                                            })
+                                        }
+                                    </select>
+                                    <MDBBtn gradient="blue"  type="submit" className="conteudoPrincipal-btn conteudoPrincipal-btn-cadastro">Cadastrar</MDBBtn>
+                                    {/* <button type="submit" className="conteudoPrincipal-btn conteudoPrincipal-btn-cadastro">
+                                        Cadastrar
+                                    </button> */}
+                                </div>
+                            </form>                              
                         </div>
                     </section>
                 </main>
