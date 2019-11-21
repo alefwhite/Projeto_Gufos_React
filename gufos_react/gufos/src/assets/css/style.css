@@ -509,6 +509,10 @@ body {
   box-shadow: 1px 1px 1px #ccc;
 }
 
+#conteudoPrincipal-cadastro input::placeholder {
+  text-align: center;
+}
+
 #conteudoPrincipal-cadastro select {
   width: 50%;
   margin: 10px;

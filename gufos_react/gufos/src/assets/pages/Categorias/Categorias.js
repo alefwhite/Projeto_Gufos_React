@@ -226,7 +226,7 @@ class Categorias extends Component {
                             <h2 className="conteudoPrincipal-cadastro-titulo">Cadastrar Tipo de Evento</h2>
                             <form onSubmit={this.CadastrarCategoria}>
                                 <div className="container">
-                                    <input type="text" id="nome-tipo-evento" placeholder="tipo do evento" value={this.state.nome} onChange={this.AtualizaNome.bind(this)} />
+                                    <input type="text" id="nome-tipo-evento" placeholder="Tipo do evento" value={this.state.nome} onChange={this.AtualizaNome.bind(this)} />
                                     <button className="conteudoPrincipal-btn conteudoPrincipal-btn-cadastro">Cadastrar</button>
                                 </div>
                             </form>

@@ -309,8 +309,7 @@ class Eventos extends Component {
                                     placeholder="dd/MM/yyyy"
                                     value={this.state.dataEvento}
                                     name="dataEvento"
-                                    onChange={this.AtualizaEstado}
-                                    
+                                    onChange={this.AtualizaEstado}                                    
                                     />
                                     <select id="option__acessolivre" className="browser-default custom-select" name="acessoLivre" onChange={this.AtualizaEstado}>
                                         <option value="1">Livre</option>
