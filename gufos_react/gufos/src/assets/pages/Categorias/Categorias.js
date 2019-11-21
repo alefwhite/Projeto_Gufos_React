@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Footer from '../../components/Footer/Footer';
 // Import dos components da biblioteca Material Design
 import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter} from 'mdbreact'; // MDBInput
+import Header from '../../components/Header/Header';
 // Link vai ser usado no lugar href do html pq ele é mais robusto.
 //import {Link} from 'react-router-dom';
 
@@ -180,6 +181,7 @@ class Categorias extends Component {
 
         return (
             <div>
+                <Header/>
                 <main className="conteudoPrincipal">
                     {/* <Link to="/">Voltar</Link> */}
                     <section className="conteudoPrincipal-cadastro">

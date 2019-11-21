@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Footer from '../../components/Footer/Footer';
+import Header from '../../components/Header/Header';
 
 // Import dos components da biblioteca Material Design
 import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter} from 'mdbreact'; // MDBInput
@@ -120,8 +121,7 @@ class Eventos extends Component {
 
      // Acionado quando clicarmos no botão editar para capturar e salvar no state os dados atuais
      AlterarEvento = (evento) => {
-        console.log(evento);
-
+       
         this.setState({
             editarModal : {
                 eventoId : evento.eventoId,
@@ -144,21 +144,44 @@ class Eventos extends Component {
         this.setState({ 
             editarModal : {
             ...this.state.editarModal, [input.target.name] : input.target.value }
-        });
-        
-        // this.setState({
-
-        //     editarModal : { 
-        //         eventoId : this.state.editarModal.eventoId,
-        //         tituloEvento : input.target.value,
-        //         dataEvento : input.target.value,
-        //         acessoLivre : input.target.value ? true : false,
-        //         tipoEvento : input.target.value,
-        //         localizacaoEvento : input.target.value
-        //     }
-        // });
+        });        
+       
     }
     
+     // UPDATE - Atualiza a categoria
+    SalvarAlteracoes = (event) => {
+        // Previne que a pagina seja carregada
+        event.preventDefault();
+
+        let id = this.state.editarModal.eventoId;
+
+        let AlteraoEventos = {
+            eventoId : this.state.editarModal.eventoId,
+            titulo : this.state.editarModal.tituloEvento,
+            categoriaId : this.state.editarModal.tipoEvento,
+            acessoLivre : this.state.editarModal.acessoLivre ? true : false,
+            dataEvento  : this.state.editarModal.dataEvento,
+            localizacaoId :this.state.editarModal.localizacaoEvento
+        }
+
+        fetch(`http://localhost:5000/api/evento/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(AlteraoEventos)
+        })
+        .then(response => response.json())
+        .catch(error => console.log(error));
+        
+        // Atraso na requisição, pois as respostas possuem intervalos muito próximos
+        setTimeout(() => {
+            this.ListarEventos();                
+        }, 500);
+
+        // Fechar Modal
+        this.toggle();
+    } 
 
 
     ListarCategorias = () => {       
@@ -215,6 +238,7 @@ class Eventos extends Component {
 
         return (
             <div>
+                <Header/>
                 <main className="conteudoPrincipal">
                     <section className="conteudoPrincipal-cadastro">
                         <h1 className="conteudoPrincipal-cadastro-titulo">Eventos</h1>
@@ -245,7 +269,7 @@ class Eventos extends Component {
                                                     <td>{evento.eventoId}</td>
                                                     <td>{evento.titulo}</td>
                                                     <td>{new Intl.DateTimeFormat('pt-BR', options).format(Date.parse(evento.dataEvento))}</td>                                                   
-                                                    <td>{evento.acessoLivre ? "Não" : "Sim"}</td>
+                                                    <td>{evento.acessoLivre ? "Sim" : "Não"}</td>
                                                     <td>{evento.categoriaId ? evento.categoria.titulo : "Sem Titulo"}</td>
                                                     <td>{evento.localizacaoId ? evento.localizacao.endereco : "Sem localização" }</td>
                                                     <td>
@@ -373,7 +397,7 @@ class Eventos extends Component {
                                     >
                                         Acesso Livre        
                                     </label>
-                                    <select id="option__acessolivre" className="browser-default custom-select" name="acessoLivre" onChange={this.AtualizaEditarModalTitulo}>
+                                    <select id="option__acessolivre_modal" className="browser-default custom-select" name="acessoLivre" onChange={this.AtualizaEditarModalTitulo} value={this.state.editarModal.acessoLivre}>
                                         <option value="1">Livre</option>
                                         <option value="0">Restrito</option>
                                     </select><br/><br/>
@@ -398,7 +422,7 @@ class Eventos extends Component {
                                     >
                                         Localização        
                                     </label>
-                                    <select id="option__localizacao" className="browser-default custom-select" name="localizacaoEvento" onChange={this.AtualizaEditarModalTitulo} value={this.state.editarModal.localizacaoEvento}>
+                                    <select id="option__localizacao_modal" className="browser-default custom-select" name="localizacaoEvento" onChange={this.AtualizaEditarModalTitulo} value={this.state.editarModal.localizacaoEvento}>
                                         {   // Percorrer a lista de Eventos
                                             this.state.listaLocalizacao.map(function (localizacao) {
                                                 return (

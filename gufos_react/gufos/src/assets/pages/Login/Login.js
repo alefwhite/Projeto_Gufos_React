@@ -1,17 +1,38 @@
 import React, { Component } from 'react';
 
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import '../../css/login.css';
+import iconLogin from '../../img/icon-login.png';
+
+
 class Login extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            email : "",
+            senha : ""
+        }
+
+    }
+
+    AtualizaEstado = (event) => {
+        this.setState({ [event.target.name] : event.target.value})
+    }
+
 
     render() {
         return (
             <div>
+                <Header/>
                 <section className="container flex">
                     <div className="img__login"><div className="img__overlay"></div></div>
 
                     <div className="item__login">
                         <div className="row">
                             <div className="item">
-                                <img src="./assets/img/icon-login.png" className="icone__login" alt="teste"/>
+                                <img src={iconLogin} className="icone__login" alt="teste"/>
                             </div>
                             <div className="item" id="item__title">
                                 <p className="text__login" id="item__description">
@@ -38,7 +59,7 @@ class Login extends Component {
                                     />
                                 </div>
                                 <div className="item">
-                                    <button className="btn btn__login" id="btn__login">
+                                    <button className="btns btn__login" id="btn__login">
                                         Login
                                     </button>
                                 </div>
@@ -46,7 +67,7 @@ class Login extends Component {
                         </div>
                     </div>
                 </section>
-
+                <Footer/>
                 {/* 
                     <script>
                         // console.log(document);
