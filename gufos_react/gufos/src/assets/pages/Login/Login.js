@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import '../../css/login.css';
-import iconLogin from '../../img/icon-login.png';
+// import iconLogin from '../../img/icon-login.png';
+// npm install --save axios
+import Axios from 'axios'; 
 
 
 class Login extends Component {
@@ -21,6 +23,28 @@ class Login extends Component {
         this.setState({ [event.target.name] : event.target.value})
     }
 
+    RealizarLogin = (event) => {        
+        event.preventDefault();
+
+        let config = {
+            headers : {
+                "Content-Type" : "application/json",
+                "Access-Control-Allow-Origin" : "*" // Cors
+            }
+        }
+
+        Axios.post("http://localhost:5000/api/login",{
+            email : this.state.email,
+            senha : this.state.senha
+        }, config)
+        .then(response => {
+            console.log("Retorno do Login: ", response)
+        })
+        .catch(error => {
+            console.log("Erro : ", error);
+        });
+    }
+
 
     render() {
         return (
@@ -31,22 +55,24 @@ class Login extends Component {
 
                     <div className="item__login">
                         <div className="row">
-                            <div className="item">
+                            {/* <div className="item">
                                 <img src={iconLogin} className="icone__login" alt="teste"/>
-                            </div>
+                            </div> */}
                             <div className="item" id="item__title">
                                 <p className="text__login" id="item__description">
                                     Bem-vindo! Faça login para acessar sua conta.
                                 </p>
                             </div>
-                            <form>
+                            <form onSubmit={this.RealizarLogin}>
                                 <div className="item">
                                     <input
                                         className="input__login"
                                         placeholder="username"
                                         type="text"
-                                        name="username"
+                                        name="email" // Deve ser igual ao nome da variavel no state para que o atualzia estado funcione
+                                        value={this.state.email}
                                         id="login__email"
+                                        onChange={this.AtualizaEstado}
                                     />
                                 </div>
                                 <div className="item">
@@ -54,12 +80,14 @@ class Login extends Component {
                                         className="input__login"
                                         placeholder="password"
                                         type="password"
-                                        name="password"
+                                        name="senha"
+                                        value={this.state.senha}
                                         id="login__password"
+                                        onChange={this.AtualizaEstado}
                                     />
                                 </div>
                                 <div className="item">
-                                    <button className="btns btn__login" id="btn__login">
+                                    <button type="submit" className="btns btn__login" id="btn__login">
                                         Login
                                     </button>
                                 </div>

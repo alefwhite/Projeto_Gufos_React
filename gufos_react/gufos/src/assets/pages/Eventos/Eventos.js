@@ -76,7 +76,7 @@ class Eventos extends Component {
                 {             
                     titulo : this.state.tituloEvento,
                     categoriaId : this.state.tipoEvento,
-                    acessoLivre : this.state.acessoLivre ? true : false,
+                    acessoLivre : this.state.acessoLivre === "0" ? false : true,
                     dataEvento  : this.state.dataEvento,
                     localizacaoId : this.state.localizacaoEvento
                 }
@@ -129,8 +129,7 @@ class Eventos extends Component {
                 dataEvento : evento.dataEvento,
                 acessoLivre : evento.acessoLivre,
                 tipoEvento : evento.categoriaId,
-                localizacaoEvento : evento.localizacaoId
-                
+                localizacaoEvento : evento.localizacaoId                
             }
         });
 
@@ -154,15 +153,19 @@ class Eventos extends Component {
         event.preventDefault();
 
         let id = this.state.editarModal.eventoId;
+        
+       
 
         let AlteraoEventos = {
             eventoId : this.state.editarModal.eventoId,
             titulo : this.state.editarModal.tituloEvento,
             categoriaId : this.state.editarModal.tipoEvento,
-            acessoLivre : this.state.editarModal.acessoLivre ? true : false,
+            acessoLivre : this.state.editarModal.acessoLivre === "0" ? false : true,
             dataEvento  : this.state.editarModal.dataEvento,
-            localizacaoId :this.state.editarModal.localizacaoEvento
+            localizacaoId : this.state.editarModal.localizacaoEvento
         }
+
+        console.log(AlteraoEventos);
 
         fetch(`http://localhost:5000/api/evento/${id}`, {
             method: "PUT",
@@ -369,6 +372,7 @@ class Eventos extends Component {
                                         type="text"
                                         value={this.state.editarModal.tituloEvento}
                                         onChange={this.AtualizaEditarModalTitulo}
+                                        name="tituloEvento"
                                         id="defaultFormCardNameEx"
                                         className="form-control"
                                     /><br/>
