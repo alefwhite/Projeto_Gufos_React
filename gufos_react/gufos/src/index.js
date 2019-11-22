@@ -7,7 +7,7 @@ import * as serviceWorker from './serviceWorker';
 // Importamos a página categorias
 import Categorias from './assets/pages/Categorias/Categorias';
 // Importamos a biblioteca react-router-dom
-import {Route, BrowserRouter as Router, Switch} from 'react-router-dom';
+import {Route, BrowserRouter as Router, Switch, Redirect} from 'react-router-dom';
 // Caso o usuario acesse alguma url não existente
 import NotFound from './assets/pages/NotFound/Notfound';
 import Eventos from './assets/pages/Eventos/Eventos';
@@ -23,6 +23,34 @@ import './assets/css/rodape.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
+import { usuarioAutenticado, parseJWT } from './services/auth';
+
+const PermissaoAdmin = ({ component: Component }) => (
+    <Route
+        render={props => usuarioAutenticado() && parseJWT().Role === "Administrador" ? (
+            <Component {...props} />
+        ) 
+        : 
+        (
+            <Redirect to={{ pathname: "/login" }} />
+        )
+    }
+    />
+)
+
+const PermissaoAluno = ({ component: Component }) => (
+    <Route
+        render={props => usuarioAutenticado() && parseJWT().Role === "Aluno" ? (
+            <Component {...props} />
+        ) 
+        : 
+        (
+            <Redirect to={{ pathname: "/login" }} />
+        )
+    }
+    />
+)
+
 
 // Router renderiza a Url / Route cria a rota
 // Realizar  a criação da rotas
@@ -32,12 +60,14 @@ const Rotas = (
         <div>
             <Switch>
                 <Route exact path="/" component={App}/>
-                <Route path="/categorias" component={() => <Categorias titulo_pagina="Categorias - Gufos"/>}/>
-                {/* <Route path="/categorias" component={Categorias}/> */}
-                <Route path="/eventos" component={() => <Eventos titulo_pagina="Eventos - Gufos"></Eventos>}/>
+                <PermissaoAdmin path="/categorias" component={() => <Categorias titulo_pagina=" Categorias - Gufos" />} />
+                <PermissaoAluno path="/eventos" component={() => <Eventos titulo_pagina="Evento - Gufos" />} />
                 <Route path="/login" component={Login}/>
-                {/* <Route path="/login" component={() => <Login titulo_pagina="Login - Gufos"/>}/> */}
                 <Route component={NotFound}/>
+                {/* <Route path="/categorias" component={() => <Categorias titulo_pagina="Categorias - Gufos"/>}/> */}
+                {/* <Route path="/categorias" component={Categorias}/> */}
+                {/* <Route path="/eventos" component={() => <Eventos titulo_pagina="Eventos - Gufos"></Eventos>}/> */}
+                {/* <Route path="/login" component={() => <Login titulo_pagina="Login - Gufos"/>}/> */}
             </Switch>
         </div>
     </Router>

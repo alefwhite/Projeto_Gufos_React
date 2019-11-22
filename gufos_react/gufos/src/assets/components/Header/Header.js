@@ -6,10 +6,7 @@ import { usuarioAutenticado, parseJWT} from '../../../services/auth';
 
 
 class Header extends Component{
-    constructor(props){
-        super(props)
-    }
-
+  
     logout = () => {
         // Remove o token do localStorage
         localStorage.removeItem("usuario-gufos");

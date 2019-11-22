@@ -7,7 +7,7 @@ import '../../css/login.css';
 // npm install --save axios
 import Axios from 'axios'; 
 import {parseJWT} from '../../../services/auth';
-
+import api from '../../../services/api';
 
 class Login extends Component {
     constructor(props) {
@@ -34,17 +34,22 @@ class Login extends Component {
         // Define que uma requisição está em andamento
         this.setState({ isLoading : true });
 
-        let config = {
-            headers: {
-                "Content-Type":"application/json",
-                "Access-Control-Allow-Origin":"*" // Cors
-            }
-        }
+        // let config = {
+        //     headers: {
+        //         "Content-Type":"application/json",
+        //         "Access-Control-Allow-Origin":"*" // Cors
+        //     }
+        // }
 
-        Axios.post("http://localhost:5000/api/login",{
+        // Axios.post("http://localhost:5000/api/login",{
+        //     email : this.state.email,
+        //     senha : this.state.senha
+        // }, config)
+
+        api.post("/login", {
             email : this.state.email,
             senha : this.state.senha
-        }, config)
+        })
         .then(response => {
           // Exibe no console somente o token
            console.log("Token : ", response.data.token);
