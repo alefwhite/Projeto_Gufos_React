@@ -14,7 +14,8 @@ class Login extends Component {
 
         this.state = {
             email : "",
-            senha : ""
+            senha : "",
+            erroMensagem : ""
         }
 
     }
@@ -25,6 +26,8 @@ class Login extends Component {
 
     RealizarLogin = (event) => {        
         event.preventDefault();
+
+        this.setState({ erroMensagem : "" });
 
         let config = {
             headers : {
@@ -38,10 +41,19 @@ class Login extends Component {
             senha : this.state.senha
         }, config)
         .then(response => {
-            console.log("Retorno do Login: ", response)
+          // Exibe no console somente o token
+           console.log("Token : ", response.data.token);
+           
+           // Caso a requisição retorne o status code 200 salva o token no local storage
+           if(response.status === 200) {
+                localStorage.setItem("usuario-gufos", response.data.token);
+           }
+
         })
+        // Caso ocorram algum erro, define o state erroMensagem como "Email ou senha inválidos"
         .catch(error => {
             console.log("Erro : ", error);
+            this.setState({ erroMensagem : "E-mail ou senha inválidos!" });
         });
     }
 
@@ -87,6 +99,7 @@ class Login extends Component {
                                     />
                                 </div>
                                 <div className="item">
+                                    <p style={{color:"red"}}>{this.state.erroMensagem}</p>
                                     <button type="submit" className="btns btn__login" id="btn__login">
                                         Login
                                     </button>
