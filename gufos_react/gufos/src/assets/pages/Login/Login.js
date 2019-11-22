@@ -5,7 +5,7 @@ import Footer from '../../components/Footer/Footer';
 import '../../css/login.css';
 // import iconLogin from '../../img/icon-login.png';
 // npm install --save axios
-import Axios from 'axios'; 
+// import Axios from 'axios'; 
 import {parseJWT} from '../../../services/auth';
 import api from '../../../services/api';
 
