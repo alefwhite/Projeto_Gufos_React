@@ -152,10 +152,8 @@ class Eventos extends Component {
         // Previne que a pagina seja carregada
         event.preventDefault();
 
-        let id = this.state.editarModal.eventoId;
-        
+        let id = this.state.editarModal.eventoId;   
        
-
         let AlteraoEventos = {
             eventoId : this.state.editarModal.eventoId,
             titulo : this.state.editarModal.tituloEvento,
@@ -401,8 +399,21 @@ class Eventos extends Component {
                                         Acesso Livre        
                                     </label>
                                     <select id="option__acessolivre_modal" className="browser-default custom-select" name="acessoLivre" onChange={this.AtualizaEditarModalTitulo} value={this.state.editarModal.acessoLivre}>
-                                        <option value="1">Livre</option>
-                                        <option value="0">Restrito</option>
+                                        {
+                                            this.editarModal.acessoLivre === "0" &&
+                                            <>
+                                                <option value="0">Restrito</option>
+                                                <option value="1">Livre</option>
+                                            </>    
+                                        }
+                                        {   
+                                            this.editarModal.acessoLivre === "1" &&
+                                            <>
+                                                <option value="0">Restrito</option>
+                                                <option value="1">Livre</option>
+                                            </>    
+
+                                        }
                                     </select><br/><br/>
 
                                     <label

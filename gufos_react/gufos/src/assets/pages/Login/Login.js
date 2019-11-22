@@ -6,6 +6,7 @@ import '../../css/login.css';
 // import iconLogin from '../../img/icon-login.png';
 // npm install --save axios
 import Axios from 'axios'; 
+import {parseJWT} from '../../../services/auth';
 
 
 class Login extends Component {
@@ -15,7 +16,8 @@ class Login extends Component {
         this.state = {
             email : "",
             senha : "",
-            erroMensagem : ""
+            erroMensagem : "",
+            isLoading : false
         }
 
     }
@@ -27,7 +29,10 @@ class Login extends Component {
     RealizarLogin = (event) => {        
         event.preventDefault();
 
+        // Limpa o conteudo do state erroMensagem
         this.setState({ erroMensagem : "" });
+        // Define que uma requisição está em andamento
+        this.setState({ isLoading : true });
 
         let config = {
             headers : {
@@ -45,15 +50,39 @@ class Login extends Component {
            console.log("Token : ", response.data.token);
            
            // Caso a requisição retorne o status code 200 salva o token no local storage
+           // E define que a requisição terminou
            if(response.status === 200) {
                 localStorage.setItem("usuario-gufos", response.data.token);
-           }
+                this.setState({ isLoading : false});
 
+                // Define basse64 recebendo o payload do token
+                let base64 = localStorage.getItem("usuario-gufos").split('.')[1];
+                // Exibe no console o valor de base64
+                console.log(base64);
+
+                // Exibe no console o valor do payload convertido para string
+                console.log(window.atob(base64));
+
+                // Exibe no console o valor de payload convertido para json
+                console.log(JSON.parse(window.atob(base64)));
+
+                // Exibe no console o tipo de usuario logado
+                console.log(parseJWT().Role);
+
+                if(parseJWT().Role === "Administrador") {
+                    this.props.history.push('/categorias');
+                } else {
+                    this.props.history.push('/eventos');
+                }
+           }
+           
         })
         // Caso ocorram algum erro, define o state erroMensagem como "Email ou senha inválidos"
+        // E define que a requisição terminou
         .catch(error => {
             console.log("Erro : ", error);
             this.setState({ erroMensagem : "E-mail ou senha inválidos!" });
+            this.setState({ isLoading : false});
         });
     }
 
@@ -99,11 +128,24 @@ class Login extends Component {
                                     />
                                 </div>
                                 <div className="item">
-                                    <p style={{color:"red"}}>{this.state.erroMensagem}</p>
-                                    <button type="submit" className="btns btn__login" id="btn__login">
-                                        Login
-                                    </button>
+                                    <p style={{color:"red"}}>{this.state.erroMensagem}</p>   
                                 </div>
+                                {   
+                                    this.state.isLoading === true &&
+                                    <div className="item">
+                                        <button type="submit" className="btns btn__login" id="btn__login" disabled>
+                                            Loading...
+                                        </button>
+                                    </div>
+                                }
+                                {
+                                    this.state.isLoading === false &&
+                                    <div className="item">
+                                        <button type="submit" className="btns btn__login" id="btn__login" >
+                                            Login
+                                        </button>
+                                    </div>
+                                }                                
                             </form>
                         </div>
                     </div>

@@ -35,7 +35,8 @@ const Rotas = (
                 <Route path="/categorias" component={() => <Categorias titulo_pagina="Categorias - Gufos"/>}/>
                 {/* <Route path="/categorias" component={Categorias}/> */}
                 <Route path="/eventos" component={() => <Eventos titulo_pagina="Eventos - Gufos"></Eventos>}/>
-                <Route path="/login" component={Login}/>
+                {/* <Route path="/login" component={Login}/> */}
+                <Route path="/login" component={() => <Login titulo_pagina="Login - Gufos"/>}/>
                 <Route component={NotFound}/>
             </Switch>
         </div>
