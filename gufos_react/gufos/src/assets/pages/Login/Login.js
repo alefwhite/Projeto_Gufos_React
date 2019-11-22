@@ -35,9 +35,9 @@ class Login extends Component {
         this.setState({ isLoading : true });
 
         let config = {
-            headers : {
-                "Content-Type" : "application/json",
-                "Access-Control-Allow-Origin" : "*" // Cors
+            headers: {
+                "Content-Type":"application/json",
+                "Access-Control-Allow-Origin":"*" // Cors
             }
         }
 
@@ -74,6 +74,8 @@ class Login extends Component {
                 } else {
                     this.props.history.push('/eventos');
                 }
+
+               
            }
            
         })
