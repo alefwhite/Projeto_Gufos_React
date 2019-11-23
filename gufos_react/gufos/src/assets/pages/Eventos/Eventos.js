@@ -33,7 +33,8 @@ class Eventos extends Component {
                 localizacaoEvento : "Selecione a localização...",
 
                 loading : false, // Criando um estado para verificar carregamento                
-                erroMsg : ""
+                erroMsg : "",
+                MsgSuccess : ""
             }
     }
 
@@ -59,13 +60,15 @@ class Eventos extends Component {
         
         // Desabilitada o icone de carregando após dois segundos
         setTimeout(() => {
-            this.setState({ loading : false });    
+            this.setState({ loading : false });
+            this.setState({ MsgSuccess : ""});    
         }, 2300);    
     }
 
     CadastrarEvento = (event) => {
         event.preventDefault(); // Inpede que a página seja carregada
-        console.log("Cadastrando");      
+        console.log("Cadastrando");
+        this.setState({ MsgSuccess : ""});      
 
         fetch("http://localhost:5000/api/evento", {
             method: "POST",
@@ -86,10 +89,17 @@ class Eventos extends Component {
         .then(response => {
             console.log(response);
 
+            
+            this.setState({ tituloEvento : ""});
+            this.setState({ dataEvento : ""});
+            this.setState({ acessoLivre : ""});
+            this.setState({ tipoEvento : "Selecione o tipo do evento..."});
+            this.setState({ localizacaoEvento : "Selecione o tipo do evento..."});
+            
+            this.setState({MsgSuccess : "Evento cadastrado com sucesso!"})
+            
             this.ListarEventos();
-
-            this.setState({ novoEvento : ""});
-
+             
             document.getElementById("evento__titulo").focus();
             //this.setState( () => ({ lista : this.state.lista}))
         })
@@ -290,9 +300,12 @@ class Eventos extends Component {
                            
                         </div>
                         <div className="container" id="conteudoPrincipal-cadastro">
-                            <h2 className="conteudoPrincipal-cadastro-titulo">Cadastrar Evento</h2>
+                            <h2 className="conteudoPrincipal-cadastro-titulo">Cadastrar Evento</h2>                            
                             <form onSubmit={this.CadastrarEvento}>
                                 <div className="container">
+                                    {/* Mensagem de evento cadastrado com sucesso */}
+                                    { this.state.MsgSuccess && <div className="text-success">{this.state.MsgSuccess}</div> }
+
                                     <input
                                     type="text"
                                     id="evento__titulo"
