@@ -399,8 +399,22 @@ class Eventos extends Component {
                                         Acesso Livre        
                                     </label>
                                     <select id="option__acessolivre_modal" className="browser-default custom-select" name="acessoLivre" onChange={this.AtualizaEditarModalTitulo} value={this.state.editarModal.acessoLivre}>
-                                        <option value="0">Restrito</option>
-                                        <option value="1">Livre</option>                                                                            
+                                        {
+                                            this.state.editarModal.acessoLivre === false ? (
+                                                <>
+                                                    <option value="0">Restrito</option>
+                                                    <option value="1">Livre</option>                                                                            
+                                                </>
+                                            )
+                                            :
+                                            (
+                                                <>
+                                                    <option value="1">Livre</option>                                                                            
+                                                    <option value="0">Restrito</option>
+                                                </>
+                                            )
+
+                                        }
                                     </select><br/><br/>
 
                                     <label
