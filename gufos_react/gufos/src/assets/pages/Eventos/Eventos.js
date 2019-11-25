@@ -441,6 +441,7 @@ class Eventos extends Component {
                                         value={this.state.editarModal.dataEvento}
                                         onChange={this.AtualizaEditarModalTitulo}
                                         id="defaultFormCardNameEx"
+                                        name="dataEvento"
                                         className="form-control"
                                     /><br/>
 
