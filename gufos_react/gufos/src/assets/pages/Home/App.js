@@ -11,8 +11,7 @@ function App() {
           <h1>Gufos</h1>
           <h2>Área de eventos da Escola SENAI de Informática.</h2>
         </div>
-      </section>
-
+      </section>        
       <main className="conteudoPrincipal">
         <section id="conteudoPrincipal-eventos">
           <h1 id="conteudoPrincipal-eventos-titulo">Próximos Eventos</h1>

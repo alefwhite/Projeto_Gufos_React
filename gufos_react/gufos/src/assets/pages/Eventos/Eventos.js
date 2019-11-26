@@ -4,6 +4,27 @@ import Header from '../../components/Header/Header';
 
 // Import dos components da biblioteca Material Design
 import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter} from 'mdbreact'; // MDBInput
+import toastr from 'toastr';
+
+toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "latestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+}
+
+   
 
 
 class Eventos extends Component {
@@ -97,7 +118,7 @@ class Eventos extends Component {
             this.setState({ localizacaoEvento : "Selecione o tipo do evento..."});
             
             this.setState({MsgSuccess : "Evento cadastrado com sucesso!"})
-            
+            toastr.success("Evento cadastrado com sucesso");
             this.ListarEventos();
              
             document.getElementById("evento__titulo").focus();
@@ -121,11 +142,13 @@ class Eventos extends Component {
         .then(response => response.json())
         .then(response => {
             console.log(response);
-            this.ListarEventos();
+            toastr.error("Evento excluído com sucesso", "Sucesso!");
+            this.ListarEventos();            
         })
         .catch(error => {
             console.log(error);
             this.setState({ erroMsg : "Não é possível excluir este evento, verifique se não há presenças confirmadas!"});
+            toastr.warning("Não é possível excluir este evento, verifique se não há presenças confirmadas!", "Atenção1");
         });
     }
 
@@ -246,6 +269,8 @@ class Eventos extends Component {
             hour12: false,
             timeZone: 'America/Sao_Paulo' 
         };
+
+        
 
         return (
             <div>
