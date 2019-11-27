@@ -21,3 +21,7 @@ https://mdbootstrap.com/docs/react/getting-started/quick-start/
 Mensagens de Erro
 
 FontAwesome
+
+
+https://material-ui.com/components/slider/
+https://react-bootstrap.github.io/components/pagination/
