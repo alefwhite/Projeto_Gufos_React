@@ -32,7 +32,9 @@ class NotFound extends Component {
         this.state = {
             modal : false,
             produtos : [],
-            IdProduto : ""
+            IdProduto : "",
+            TotalProdutos : "",
+            ContPaginacao : 1
         }
         
     }
@@ -59,6 +61,7 @@ class NotFound extends Component {
             .then(response => response.json())
             .then(data => {
                 this.setState({ produtos : data });
+                this.setState({TotalProdutos : this.state.produtos.length})
                 console.log(data);
              })
             .catch(error => console.log(error));       
@@ -66,8 +69,7 @@ class NotFound extends Component {
     // Após renderizar o componente
     componentDidMount() {
         console.log("Carregado...");
-        this.ListarProdutos();
-      
+        this.ListarProdutos();      
     }
 
     VerOfertas = (id) => {
@@ -261,10 +263,10 @@ class NotFound extends Component {
                     produto: 'Banana',
                     descrição: 'Nanica',
                     cidade : 'São Paulo',
-                    região : 'Sul',
-                    quantidade : '10Kg',
+                    região : 'Norte',
+                    quantidade : '20Kg',
                     validade : "30/11/2019",
-                    cooperativa : "Ribeirão das Frutas",
+                    cooperativa : "Ribeirão das Cores",
                     contato : "(11)2236-8987"
                     
                   },
@@ -320,17 +322,22 @@ class NotFound extends Component {
                                     <span aria-hidden="true">Anterior</span>
                                     </MDBPageNav>
                                 </MDBPageItem>
-                                <MDBPageItem>
-                                    <MDBPageNav>
-                                            1
-                                    </MDBPageNav>
-                                </MDBPageItem>
-                                <MDBPageItem>
-                                    <MDBPageNav>2</MDBPageNav>
-                                </MDBPageItem>
-                                <MDBPageItem>
-                                    <MDBPageNav>3</MDBPageNav>
-                                </MDBPageItem>
+                                {
+                                   this.state.produtos.map(function() {  
+
+                                        return (
+                                            
+                                            <MDBPageItem>
+                                                <MDBPageNav>
+                                                    {this.state.ContPaginacao}
+                                                </MDBPageNav>
+                                            </MDBPageItem>
+
+                                        );
+                                     
+                                   }.bind(this))
+                                }
+                                
                                 <MDBPageItem>
                                     <MDBPageNav aria-label="Previous">
                                     <span aria-hidden="true">Próximo</span>
