@@ -40,7 +40,8 @@ class NotFound extends Component {
             Quantidade_Por_Pagina: 9,
             Pg : 1,
             QtdPaginas : 0,
-            Item : []
+            
+            TodasOfertas : []
         }
 
        
@@ -69,6 +70,7 @@ class NotFound extends Component {
       
       await this.ListarProdutosPorPagina();
       await this.ListarProdutos();
+      await this.ListarOfertas();
 
       this.setState({ QtdPaginas : Math.round(this.state.TotalProdutos / this.state.Quantidade_Por_Pagina)});
       console.log("Qtd: ",this.state.QtdPaginas);
@@ -119,6 +121,26 @@ class NotFound extends Component {
 
     }
 
+   async ListarOfertas() {
+      let config = {
+        headers: {
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin":"*" // Cors
+        }
+       }
+              
+      await Axios.get("http://localhost:5000/api/oferta", config)
+      .then(response => {
+        console.log("Ofertas: ", response.data);
+        this.setState({TodasOfertas : response.data});
+      
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    }
+
     VerOfertas = (id) => {
         // Abrir Modal
          console.log("IdDaOfeta: ", id);
@@ -157,6 +179,12 @@ class NotFound extends Component {
 
             const data = {
               columns: [
+                {
+                  label: 'Ações',
+                  field: 'Ações',
+                  sort: 'asc',
+                  width: 150
+                },
                 {
                   label: 'Produto',
                   field: 'produto',
@@ -207,141 +235,10 @@ class NotFound extends Component {
                 }
               ],
               rows: [
-                  {
+                  { 
+                    Ações : <MDBBtn color="purple" size="sm">Reservar</MDBBtn>, 
                     produto: 'Banana',
                     descrição: 'Nanica',
-                    cidade : 'São Paulo',
-                    região : 'Sul',
-                    quantidade : '10Kg',
-                    validade : "30/11/2019",
-                    cooperativa : "Ribeirão das Frutas",
-                    contato : "(11)2236-8987"
-                    
-                  },
-                  {
-                    produto: 'Banana',
-                    descrição: 'Nanica',
-                    cidade : 'São Paulo',
-                    região : 'Sul',
-                    quantidade : '10Kg',
-                    validade : "30/11/2019",
-                    cooperativa : "Ribeirão das Frutas",
-                    contato : "(11)2236-8987"
-                    
-                  },
-                  {
-                    produto: 'Banana',
-                    descrição: 'Nanica',
-                    cidade : 'São Paulo',
-                    região : 'Sul',
-                    quantidade : '10Kg',
-                    validade : "30/11/2019",
-                    cooperativa : "Ribeirão das Frutas",
-                    contato : "(11)2236-8987"
-                    
-                  },
-                  {
-                    produto: 'Banana',
-                    descrição: 'Nanica',
-                    cidade : 'São Paulo',
-                    região : 'Sul',
-                    quantidade : '10Kg',
-                    validade : "30/11/2019",
-                    cooperativa : "Ribeirão das Frutas",
-                    contato : "(11)2236-8987"
-                    
-                  },
-                  {
-                    produto: 'Banana',
-                    descrição: 'Nanica',
-                    cidade : 'São Paulo',
-                    região : 'Sul',
-                    quantidade : '10Kg',
-                    validade : "30/11/2019",
-                    cooperativa : "Ribeirão das Frutas",
-                    contato : "(11)2236-8987"
-                    
-                  },
-                  {
-                    produto: 'Banana',
-                    descrição: 'Nanica',
-                    cidade : 'São Paulo',
-                    região : 'Sul',
-                    quantidade : '10Kg',
-                    validade : "30/11/2019",
-                    cooperativa : "Ribeirão das Frutas",
-                    contato : "(11)2236-8987"
-                    
-                  },
-                  {
-                    produto: 'Banana',
-                    descrição: 'Nanica',
-                    cidade : 'São Paulo',
-                    região : 'Sul',
-                    quantidade : '10Kg',
-                    validade : "30/11/2019",
-                    cooperativa : "Ribeirão das Frutas",
-                    contato : "(11)2236-8987"
-                    
-                  },
-                  {
-                    produto: 'Banana',
-                    descrição: 'Nanica',
-                    cidade : 'São Paulo',
-                    região : 'Sul',
-                    quantidade : '10Kg',
-                    validade : "30/11/2019",
-                    cooperativa : "Ribeirão das Frutas",
-                    contato : "(11)2236-8987"
-                    
-                  },
-                  {
-                    produto: 'Banana',
-                    descrição: 'Nanica',
-                    cidade : 'São Paulo',
-                    região : 'Sul',
-                    quantidade : '10Kg',
-                    validade : "30/11/2019",
-                    cooperativa : "Ribeirão das Frutas",
-                    contato : "(11)2236-8987"
-                    
-                  },
-                  {
-                    produto: 'Banana',
-                    descrição: 'Nanica',
-                    cidade : 'São Paulo',
-                    região : 'Sul',
-                    quantidade : '10Kg',
-                    validade : "30/11/2019",
-                    cooperativa : "Ribeirão das Frutas",
-                    contato : "(11)2236-8987"
-                    
-                  },
-                  {
-                    produto: 'Banana',
-                    descrição: 'Nanica',
-                    cidade : 'São Paulo',
-                    região : 'Sul',
-                    quantidade : '10Kg',
-                    validade : "30/11/2019",
-                    cooperativa : "Ribeirão das Frutas",
-                    contato : "(11)2236-8987"
-                    
-                  },
-                  {
-                    produto: 'Banana',
-                    descrição: 'Nanica',
-                    cidade : 'São Paulo',
-                    região : 'Norte',
-                    quantidade : '20Kg',
-                    validade : "30/11/2019",
-                    cooperativa : "Ribeirão das Cores",
-                    contato : "(11)2236-8987"
-                    
-                  },
-                  {
-                    produto: 'Banana',
-                    descrição: 'Maça',
                     cidade : 'São Paulo',
                     região : 'Sul',
                     quantidade : '10Kg',
@@ -420,9 +317,11 @@ class NotFound extends Component {
                             <MDBModalHeader toggle={this.toggle}>Editar</MDBModalHeader>
                                 <MDBModalBody>
                                     <MDBDataTable
+                                        scrollX
                                         striped
                                         bordered
                                         small
+                                        hover
                                         data={data}
                                     />
                                 </MDBModalBody>
