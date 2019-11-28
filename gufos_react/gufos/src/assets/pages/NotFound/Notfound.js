@@ -32,6 +32,8 @@ class NotFound extends Component {
 
         this.state = {
             modal : false,
+            modal13: false,
+
             produtos : [],
             IdProduto : "",
 
@@ -55,6 +57,13 @@ class NotFound extends Component {
             modal: !this.state.modal
         });
     }
+
+    toggleForm = () => {
+        this.setState({
+            modal13: !this.state.modal13
+        });
+    }    
+    
 
     Teste = () => {
         // Abrir Modal
@@ -164,7 +173,7 @@ class NotFound extends Component {
         console.log(error);
       });     
   }
-
+  
    async VerOfertas(id) {
         // Abrir Modal
          console.log("Id do Produto: ", id);
@@ -192,7 +201,7 @@ class NotFound extends Component {
                     }
               });
 
-              Obj.ações = <MDBBtn color="purple" size="sm">Reservar</MDBBtn>;
+              Obj.ações = <MDBBtn color="purple" size="sm" onClick={this.ReservarProduto}>Reservar</MDBBtn>;
               Obj.produto = oferta.produto.nome;
               Obj.descrição = oferta.descricao;
               Obj.cidade = oferta.cidade;
@@ -212,6 +221,11 @@ class NotFound extends Component {
          this.setState({ListaOferta : OfertaFiltrada});
          
          this.toggle();
+    }
+
+    ReservarProduto = () => {
+      console.log("Reservando...")
+      this.toggleForm();
     }
     
 
@@ -364,32 +378,46 @@ class NotFound extends Component {
                             </MDBCol>
                     </MDBRow>                    
                 </div>
+               
+                  <div className="container">                        
+                      <MDBContainer>                           
+                          
+                          <MDBModal isOpen={this.state.modal} toggle={this.toggle} size="fluid">
+                          <MDBModalHeader toggle={this.toggle}>Editar</MDBModalHeader>
+                              <MDBModalBody>
+                                  <MDBDataTable
+                                      scrollX
+                                      striped
+                                      bordered
+                                      small
+                                      hover
+                                      data={data}
+                                  />
+                              </MDBModalBody>
+                              <MDBModalFooter>
+                                  <MDBBtn color="secondary" onClick={this.toggle}>Fechar</MDBBtn>                                       
+                                  {/* <MDBBtn color="primary" type="submit">Salvar</MDBBtn> */}
+                              </MDBModalFooter>
+                          </MDBModal>
+                          
+                      </MDBContainer>
+                      
+                      <MDBContainer>                        
+                        <MDBModal isOpen={this.state.modal13} toggle={this.toggleForm}>
+                          <MDBModalHeader toggle={this.toggle}>Reservar Produto</MDBModalHeader>
+                          <MDBModalBody>
+                                    Aqui irá conter um formulário 
+                          </MDBModalBody>
+                          <MDBModalFooter>
+                            <MDBBtn color="secondary" onClick={this.toggleForm}>Close</MDBBtn>
+                            <MDBBtn color="primary" onClick={() => toastr.success("Produto Reservado com sucesso!")}>Save changes</MDBBtn>
+                          </MDBModalFooter>
+                        </MDBModal>
+                    </MDBContainer>
 
+                      
 
-                <button onClick={this.Teste}>Abrir Modal</button>
-                    <div className="container">                        
-                        <MDBContainer>                           
-                            
-                            <MDBModal isOpen={this.state.modal} toggle={this.toggle} size="fluid">
-                            <MDBModalHeader toggle={this.toggle}>Editar</MDBModalHeader>
-                                <MDBModalBody>
-                                    <MDBDataTable
-                                        scrollX
-                                        striped
-                                        bordered
-                                        small
-                                        hover
-                                        data={data}
-                                    />
-                                </MDBModalBody>
-                                <MDBModalFooter>
-                                    <MDBBtn color="secondary" onClick={this.toggle}>Fechar</MDBBtn>                                       
-                                    {/* <MDBBtn color="primary" type="submit">Salvar</MDBBtn> */}
-                                </MDBModalFooter>
-                            </MDBModal>
-                            
-                        </MDBContainer>
-                    </div>
+                  </div>
                 <Footer/>
             </div>
         );
