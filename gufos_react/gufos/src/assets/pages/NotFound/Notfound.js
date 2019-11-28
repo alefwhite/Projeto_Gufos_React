@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
 import { MDBDataTable, MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,  MDBPagination, MDBPageItem, MDBPageNav, MDBCol, MDBRow } from 'mdbreact'; // MDBInput
-
+import Axios from 'axios';
 import toastr from 'toastr';
 import produtoImg from '../../img/Agrupar51.png';
 import './produto.css';
+
 
 toastr.options = {
     "closeButton": true,
@@ -33,10 +34,16 @@ class NotFound extends Component {
             modal : false,
             produtos : [],
             IdProduto : "",
-            TotalProdutos : "",
-            ContPaginacao : 1
+
+            ProdutosPorPagina : [],
+            TotalProdutos : 0,
+            Quantidade_Por_Pagina: 9,
+            Pg : 1,
+            QtdPaginas : 0,
+            Item : []
         }
-        
+
+       
     }
     
     toggle = () => {
@@ -54,22 +61,61 @@ class NotFound extends Component {
     UNSAFE_componentWillMount() {
        
     }
-
-    ListarProdutos = () => {     
        
-        fetch("http://localhost:5000/api/produto")
+        
+    // Após renderizar o componente
+    async componentDidMount() {
+      console.log("Carregado...");
+      
+      await this.ListarProdutosPorPagina();
+      await this.ListarProdutos();
+
+      this.setState({ QtdPaginas : Math.round(this.state.TotalProdutos / this.state.Quantidade_Por_Pagina)});
+      console.log("Qtd: ",this.state.QtdPaginas);
+           
+      
+    }
+
+    
+    // Quando a uma atualização no componente
+    componentDidUpdate() {
+      console.log("Atualizando...");
+    }
+    
+
+   async ListarProdutos() {     
+       
+     await fetch("http://localhost:5000/api/produto")
             .then(response => response.json())
             .then(data => {
                 this.setState({ produtos : data });
                 this.setState({TotalProdutos : this.state.produtos.length})
                 console.log(data);
+                console.log(this.state.TotalProdutos);
              })
             .catch(error => console.log(error));       
     }
-    // Após renderizar o componente
-    componentDidMount() {
-        console.log("Carregado...");
-        this.ListarProdutos();      
+
+    async ListarProdutosPorPagina() {
+        let config = {
+            headers: {
+                "Content-Type":"application/json",
+                "Access-Control-Allow-Origin":"*" // Cors
+            }
+        }
+
+      let pular = (this.state.Pg - 1) * this.state.Quantidade_Por_Pagina;
+      let pegar = this.state.Quantidade_Por_Pagina;
+
+     await Axios.get(`http://localhost:5000/api/produto/paginacao/${pular}/${pegar}`,config)
+      .then(response => {
+        console.log("Axios: ", response.data);
+        this.setState({ProdutosPorPagina : response.data});
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
     }
 
     VerOfertas = (id) => {
@@ -82,9 +128,29 @@ class NotFound extends Component {
         event.preventDefault();
     }
 
+    SetPg = (row) => {
+      this.setState({Pg : row})
+      console.log("Pagina: ", this.state.Pg);
+      this.ListarProdutosPorPagina();
+    }
 
+    renderPagina = (row) => {
+      return  <MDBPageItem onClick={() => this.SetPg(row)} key={row}>
+                <MDBPageNav>
+                    {row}
+                </MDBPageNav>
+              </MDBPageItem>         
+    }
+     
+
+   
     render(){
-       
+
+      let paginas = [];
+      
+      for(let i = 0; i < this.state.QtdPaginas; i++) {
+        paginas.push(i + 1);
+      }
 
             const data = {
               columns: [
@@ -283,10 +349,9 @@ class NotFound extends Component {
                   }
                   
               ]
+             
         }
-    
-
-
+               
         return( 
             <div>
                 <Header/>
@@ -294,14 +359,14 @@ class NotFound extends Component {
                 <div className="container_produto">
                     <form id="produtos" className="produtos_todo" onSubmit={this.VisualizarProduto}>
                         {
-                            this.state.produtos.map(function(produto){
+                            this.state.ProdutosPorPagina.map(function(produto){
 
                                 return(
                                     <div className="card_produtos" key={produto.produtoId}>
                                         <img src={produtoImg}/>
                                         <div className="card_btn">
                                             <label>
-                                                <button type="submit" className="btn2">Fornecer</button>
+                                                <button type="submit" className="btn2">{produto.produtoId}</button>
                                             </label>
                                             <label>
                                                 <button type="submit" className="btn1" onClick={() => this.VerOfertas(produto.produtoId)}>Ver Ofertas</button>
@@ -322,22 +387,17 @@ class NotFound extends Component {
                                     <span aria-hidden="true">Anterior</span>
                                     </MDBPageNav>
                                 </MDBPageItem>
-                                {
-                                   this.state.produtos.map(function() {  
+                                    {
+                                                                             
+                                      paginas.map(this.renderPagina)
+                                      
+                                    }
 
-                                        return (
-                                            
-                                            <MDBPageItem>
-                                                <MDBPageNav>
-                                                    {this.state.ContPaginacao}
-                                                </MDBPageNav>
-                                            </MDBPageItem>
-
-                                        );
-                                     
-                                   }.bind(this))
-                                }
-                                
+                                    {/* <MDBPageItem>
+                                        <MDBPageNav>
+                                          1
+                                        </MDBPageNav>
+                                    </MDBPageItem>                                                                 */}
                                 <MDBPageItem>
                                     <MDBPageNav aria-label="Previous">
                                     <span aria-hidden="true">Próximo</span>
