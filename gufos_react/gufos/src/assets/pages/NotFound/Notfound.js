@@ -106,6 +106,7 @@ class NotFound extends Component {
 
       let pular = (this.state.Pg - 1) * this.state.Quantidade_Por_Pagina;
       let pegar = this.state.Quantidade_Por_Pagina;
+      console.log("Pula: ", pular)
 
      await Axios.get(`http://localhost:5000/api/produto/paginacao/${pular}/${pegar}`,config)
       .then(response => {
@@ -120,7 +121,7 @@ class NotFound extends Component {
 
     VerOfertas = (id) => {
         // Abrir Modal
-         console.log(id);
+         console.log("IdDaOfeta: ", id);
          this.toggle();
     }
 
@@ -131,7 +132,9 @@ class NotFound extends Component {
     SetPg = (row) => {
       this.setState({Pg : row})
       console.log("Pagina: ", this.state.Pg);
-      this.ListarProdutosPorPagina();
+      setTimeout(() => {
+        this.ListarProdutosPorPagina();
+      }, 500);
     }
 
     renderPagina = (row) => {
