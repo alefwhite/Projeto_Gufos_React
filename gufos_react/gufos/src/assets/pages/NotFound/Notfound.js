@@ -41,7 +41,10 @@ class NotFound extends Component {
             Pg : 1,
             QtdPaginas : 0,
             
-            TodasOfertas : []
+            TodasOfertas : [],
+            ListaOferta : [],
+
+            Telefones : []
         }
 
        
@@ -70,7 +73,10 @@ class NotFound extends Component {
       
       await this.ListarProdutosPorPagina();
       await this.ListarProdutos();
-      await this.ListarOfertas();
+
+      this.PegarTelefone();
+      
+      //await this.ListarOfertas();
 
       this.setState({ QtdPaginas : Math.round(this.state.TotalProdutos / this.state.Quantidade_Por_Pagina)});
       console.log("Qtd: ",this.state.QtdPaginas);
@@ -140,12 +146,74 @@ class NotFound extends Component {
       });
 
     }
+  
+   PegarTelefone = () => {
+      let config = {
+        headers: {
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin":"*" // Cors
+        }
+      }
+      
+     Axios.get(`http://localhost:5000/api/telefone`, config)
+      .then(response => {        
+        this.setState({Telefones : response.data});   
+        console.log("Tel: ", this.state.Telefones);
+      })
+      .catch(error => {
+        console.log(error);
+      });     
+  }
 
-    VerOfertas = (id) => {
+   async VerOfertas(id) {
         // Abrir Modal
-         console.log("IdDaOfeta: ", id);
+         console.log("Id do Produto: ", id);
+         this.setState({IdProduto : id});
+         await this.ListarOfertas();
+        
+        let OfertaFiltrada = [];
+
+        let options = {
+          year: 'numeric', month: 'numeric', day: 'numeric',         
+          hour12: false,
+          timeZone: 'America/Sao_Paulo' 
+        };
+        
+        this.state.TodasOfertas.map(async function(oferta){
+            
+            if(oferta.produtoId === id) {
+              let Obj = new Object();
+
+              let Telefone = "";
+
+              this.state.Telefones.forEach(element => {
+                    if(element.usuarioId == oferta.usuario.usuarioId) {
+                        Telefone = element.telefone1;
+                    }
+              });
+
+              Obj.ações = <MDBBtn color="purple" size="sm">Reservar</MDBBtn>;
+              Obj.produto = oferta.produto.nome;
+              Obj.descrição = oferta.descricao;
+              Obj.cidade = oferta.cidade;
+              Obj.região = oferta.regiao;
+              Obj.quantidade = oferta.quantidade;
+              Obj.validade = new Intl.DateTimeFormat('pt-BR', options).format(Date.parse(oferta.validade))
+              Obj.cooperativa = oferta.usuario.nome;
+              Obj.contato = Telefone;
+
+              OfertaFiltrada.push(Obj);
+            }
+            
+         
+
+         }.bind(this));
+        
+         this.setState({ListaOferta : OfertaFiltrada});
+         
          this.toggle();
     }
+    
 
     VisualizarProduto = (event) => {
         event.preventDefault();
@@ -172,85 +240,74 @@ class NotFound extends Component {
     render(){
 
       let paginas = [];
-      
-      for(let i = 0; i < this.state.QtdPaginas; i++) {
-        paginas.push(i + 1);
-      }
+     
+      for(let i = 0; i < this.state.QtdPaginas; i++) {      
+          paginas.push(i + 1);
+      }      
 
-            const data = {
-              columns: [
-                {
-                  label: 'Ações',
-                  field: 'Ações',
-                  sort: 'asc',
-                  width: 150
-                },
-                {
-                  label: 'Produto',
-                  field: 'produto',
-                  sort: 'asc',
-                  width: 150
-                },
-                {
-                  label: 'Descrição',
-                  field: 'descrição',
-                  sort: 'asc',
-                  width: 270
-                },
-                {
-                  label: 'Cidade',
-                  field: 'cidade',
-                  sort: 'asc',
-                  width: 200
-                },
-                {
-                  label: 'Região',
-                  field: 'região',
-                  sort: 'asc',
-                  width: 100
-                },
-                {
-                  label: 'Quantidade',
-                  field: 'quantidade',
-                  sort: 'asc',
-                  width: 150
-                },
-                {
-                  label: 'Validade',
-                  field: 'validade',
-                  sort: 'asc',
-                  width: 100
-                },
-                {
-                  label: 'Cooperativa',
-                  field: 'cooperativa',
-                  sort: 'asc',
-                  width: 100
-                },
-                {
-                  label: 'Contato',
-                  field: 'contato',
-                  sort: 'asc',
-                  width: 100
-                }
-              ],
-              rows: [
-                  { 
-                    Ações : <MDBBtn color="purple" size="sm">Reservar</MDBBtn>, 
-                    produto: 'Banana',
-                    descrição: 'Nanica',
-                    cidade : 'São Paulo',
-                    região : 'Sul',
-                    quantidade : '10Kg',
-                    validade : "30/11/2019",
-                    cooperativa : "Ribeirão das Frutas",
-                    contato : "(11)2236-8987"
-                    
-                  }
-                  
-              ]
-             
-        }
+      //console.log("Dentro do Render: ",this.state.ListaOferta);
+
+      const data = {
+
+          columns: [
+            {
+              label: 'Ações',
+              field: 'ações',
+              sort: 'asc',
+              width: 150
+            },
+            {
+              label: 'Produto',
+              field: 'produto',
+              sort: 'asc',
+              width: 150
+            },
+            {
+              label: 'Descrição',
+              field: 'descrição',
+              sort: 'asc',
+              width: 270
+            },
+            {
+              label: 'Cidade',
+              field: 'cidade',
+              sort: 'asc',
+              width: 200
+            },
+            {
+              label: 'Região',
+              field: 'região',
+              sort: 'asc',
+              width: 100
+            },
+            {
+              label: 'Quantidade',
+              field: 'quantidade',
+              sort: 'asc',
+              width: 150
+            },
+            {
+              label: 'Validade',
+              field: 'validade',
+              sort: 'asc',
+              width: 100
+            },
+            {
+              label: 'Cooperativa',
+              field: 'cooperativa',
+              sort: 'asc',
+              width: 100
+            },
+            {
+              label: 'Contato',
+              field: 'contato',
+              sort: 'asc',
+              width: 100
+            }
+          ],         
+          rows : this.state.ListaOferta          
+            
+      }
                
         return( 
             <div>
