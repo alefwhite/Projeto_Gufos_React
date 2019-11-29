@@ -234,7 +234,7 @@ class NotFound extends Component {
       console.log("Pagina: ", this.state.Pg);
       setTimeout(() => {
         this.ListarProdutosPorPagina();
-      }, 500);
+      }, 350);
     }
 
     renderPagina = (row) => {
