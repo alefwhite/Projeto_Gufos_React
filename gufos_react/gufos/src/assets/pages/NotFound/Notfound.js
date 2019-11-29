@@ -19,7 +19,7 @@ toastr.options = {
     "onclick": null,
     "showDuration": "300",
     "hideDuration": "1000",
-    "timeOut": "5000",
+    "timeOut": "10000",
     "extendedTimeOut": "1000",
     "showEasing": "swing",
     "hideEasing": "linear",
@@ -47,10 +47,15 @@ class NotFound extends Component {
             TodasOfertas : [],
             ListaOferta : [],
 
-            Telefones : []
+            Telefones : [],
+            value: 0,
+            
+            isLoading : false,
+
+            Cooperativa : "",
+            IdOferta : ""
         }
 
-       
     }
     
     toggle = () => {
@@ -63,6 +68,10 @@ class NotFound extends Component {
         this.setState({
             modal13: !this.state.modal13
         });
+
+        if(this.state.modal13 === false) {
+            this.setState({value : 0});
+        }
     }
 
      // Antes de carregar nosso Dom
@@ -184,7 +193,7 @@ class NotFound extends Component {
         };
         
         this.state.TodasOfertas.map(async function(oferta){
-            
+            console.log("Oferta: ", oferta)
             if(oferta.produtoId === id) {
               let Obj = {} //new Object();
 
@@ -196,7 +205,7 @@ class NotFound extends Component {
                     }
               });
 
-              Obj.ações = <MDBBtn color="purple" size="sm" onClick={this.ReservarProduto}>Reservar</MDBBtn>;
+              Obj.ações = <MDBBtn color="purple" size="sm" onClick={() => this.ReservarProduto(oferta.ofertaId, oferta.usuario.nome)}>Reservar</MDBBtn>;
               Obj.produto = oferta.produto.nome;
               Obj.descrição = oferta.descricao;
               Obj.cidade = oferta.cidade;
@@ -219,9 +228,49 @@ class NotFound extends Component {
          this.toggle();
     }
 
-    ReservarProduto = () => {
-      console.log("Reservando...")
-      this.toggleForm();
+    ReservarProduto = (OfertaId, nome) => {
+      console.log("IdOferta: ", OfertaId )
+      console.log("Nome: ", nome)
+
+      this.setState({Cooperativa : nome});
+      this.setState({IdOferta : OfertaId});
+
+      this.toggleForm();      
+
+    }
+
+    ConcluirReserva = () => {
+      console.log("Concluir Reserva");
+      let config = {
+            headers: {
+                "Content-Type":"application/json",
+                "Access-Control-Allow-Origin":"*" // Cors
+            }
+        }
+        console.log("valor", this.state.value)
+        console.log("Id", this.state.IdOferta)
+
+        Axios.post("http://localhost:5000/api/reserva",{
+            quantidade : this.state.value,
+            ofertaId : this.state.IdOferta
+
+        }, config)
+        .then((response) => {
+            console.log("Resp: ", response.data);
+            if(response.status === 200) {
+               toastr.success(`Sua reserva foi feita você tera até 5 dias para entrar em contato com a cooperativa ${this.state.Cooperativa}`, response.data.mensagem)
+            }
+            
+            this.VerOfertas(this.state.IdProduto);
+            this.toggle();
+            // Fechar Form
+            this.toggleForm();
+
+        })
+        .catch((erro) => {
+          console.log(erro);
+          toastr.error("Não foi possível efetuar sua reservar")
+        })
     }
     
 
@@ -234,7 +283,7 @@ class NotFound extends Component {
       console.log("Pagina: ", this.state.Pg);
       setTimeout(() => {
         this.ListarProdutosPorPagina();
-      }, 350);
+      }, 380);
     }
 
     renderPagina = (row) => {
@@ -244,7 +293,20 @@ class NotFound extends Component {
                 </MDBPageNav>
               </MDBPageItem>         
     }
-     
+
+    decrease = () => {
+      if(this.state.value > 0) {
+        this.setState({ value: parseInt(this.state.value - 1 )});
+      }
+    }
+  
+    increase = () => {
+      this.setState({ value: parseInt(this.state.value + 1) });
+    }
+    
+    AtulizaValueReserva = (input) => {
+      this.setState({ value : parseInt(input.target.value)});
+    }
 
    
     render(){
@@ -388,7 +450,7 @@ class NotFound extends Component {
                       <MDBContainer>                           
                           
                           <MDBModal isOpen={this.state.modal} toggle={this.toggle} size="fluid">
-                          <MDBModalHeader toggle={this.toggle}>Editar</MDBModalHeader>
+                          <MDBModalHeader toggle={this.toggle}>Ofertas</MDBModalHeader>
                               <MDBModalBody>
                                   <MDBDataTable
                                       scrollX
@@ -411,11 +473,21 @@ class NotFound extends Component {
                         <MDBModal isOpen={this.state.modal13} toggle={this.toggleForm}>
                           <MDBModalHeader toggle={this.toggle}>Reservar Produto</MDBModalHeader>
                           <MDBModalBody>
-                                    Aqui irá conter um formulário 
+                            <div className="centralizar_">
+
+                              <div className="def-number-input number-input">
+                                  <label className="label_prod">Quantidade do produto: </label>
+                                  <button onClick={this.decrease} className="minus"><i className="fas fa-minus"></i></button>
+                                  <input className="quantity centralizar_" name="quantity" value={this.state.value} onChange={this.AtulizaValueReserva}
+                                  type="number" />
+                                  <button onClick={this.increase} className="plus"><i className="fas fa-plus"></i></button>
+                              </div>
+
+                            </div>
                           </MDBModalBody>
                           <MDBModalFooter>
                             <MDBBtn color="secondary" onClick={this.toggleForm}>Fechar</MDBBtn>
-                            <MDBBtn color="primary" onClick={() => toastr.success("Produto Reservado com sucesso!")}>Concluir Reserva</MDBBtn>
+                            <MDBBtn color="primary" onClick={() => this.ConcluirReserva()}>Concluir Reserva</MDBBtn>
                           </MDBModalFooter>
                         </MDBModal>
                     </MDBContainer>

@@ -138,4 +138,35 @@ select{
     -moz-box-shadow: 5px 5px 5px 0px rgba(204,204,204,1);
     box-shadow: 5px 5px 5px 0px rgba(204,204,204,1);
   }
+
+  .centralizar_ {
+    text-align: center;   
+  }
+
+  .label_prod {
+    margin-right: 10px;
+  }
+
+  .plus {
+    width: 36px;
+    height: 28px;
+    color: white;
+    border-radius: 2px;
+    background-color:var(--verde);
+    border: none;
+  }   
+  .minus {
+    width: 36px;
+    height: 28px;
+    color:white;
+    border-radius: 2px;
+    background-color:var(--vermelho);
+    border: none;
+      
+  }
+ 
+
+
+  
+ 
 /*Produtos*/
