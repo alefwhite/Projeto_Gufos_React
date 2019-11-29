@@ -249,28 +249,32 @@ class NotFound extends Component {
         }
         console.log("valor", this.state.value)
         console.log("Id", this.state.IdOferta)
-
-        Axios.post("http://localhost:5000/api/reserva",{
-            quantidade : this.state.value,
-            ofertaId : this.state.IdOferta
-
-        }, config)
-        .then((response) => {
-            console.log("Resp: ", response.data);
-            if(response.status === 200) {
-               toastr.success(`Sua reserva foi feita você tera até 5 dias para entrar em contato com a cooperativa ${this.state.Cooperativa}.`, response.data.mensagem)
-            }
-            
-            this.VerOfertas(this.state.IdProduto);
-            this.toggle();
-            // Fechar Form
-            this.toggleForm();
-
-        })
-        .catch((erro) => {
-          console.log(erro);
-          toastr.error("Não foi possível efetuar sua reservar")
-        })
+        if(this.state.value > 0) {
+            Axios.post("http://localhost:5000/api/reserva",{
+                quantidade : this.state.value,
+                ofertaId : this.state.IdOferta
+    
+            }, config)
+            .then((response) => {
+                console.log("Resp: ", response.data);
+                if(response.status === 200) {
+                  toastr.success(`Sua reserva foi feita você tera até 5 dias para entrar em contato com a cooperativa ${this.state.Cooperativa}.`, response.data.mensagem)
+                }
+                
+                this.VerOfertas(this.state.IdProduto);
+                this.toggle();
+                // Fechar Form
+                this.toggleForm();
+    
+            })
+            .catch((erro) => {
+              console.log(erro);
+              toastr.error("Não foi possível efetuar sua reservar")
+            })
+        }
+        else {
+          toastr.info("A quantidade não foi informada.", "Atenção!");
+        }
     }
     
 
