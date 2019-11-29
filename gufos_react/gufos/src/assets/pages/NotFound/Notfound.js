@@ -309,7 +309,7 @@ class NotFound extends Component {
               width: 150
             },
             {
-              label: 'Quantidade',
+              label: 'Quantidade Por Kilo',
               field: 'quantidade',
               sort: 'asc',
               width: 150
