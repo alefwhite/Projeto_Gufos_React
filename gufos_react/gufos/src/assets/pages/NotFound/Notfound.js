@@ -267,6 +267,18 @@ class NotFound extends Component {
               width: 150
             },
             {
+              label: 'Cooperativa',
+              field: 'cooperativa',
+              sort: 'asc',
+              width: 100
+            },
+            {
+              label: 'Contato',
+              field: 'contato',
+              sort: 'asc',
+              width: 100
+            },
+            {
               label: 'Produto',
               field: 'produto',
               sort: 'asc',
@@ -307,19 +319,8 @@ class NotFound extends Component {
               field: 'validade',
               sort: 'asc',
               width: 100
-            },
-            {
-              label: 'Cooperativa',
-              field: 'cooperativa',
-              sort: 'asc',
-              width: 100
-            },
-            {
-              label: 'Contato',
-              field: 'contato',
-              sort: 'asc',
-              width: 100
-            }
+            }           
+           
           ],         
           rows : this.state.ListaOferta          
             
@@ -413,8 +414,8 @@ class NotFound extends Component {
                                     Aqui irá conter um formulário 
                           </MDBModalBody>
                           <MDBModalFooter>
-                            <MDBBtn color="secondary" onClick={this.toggleForm}>Close</MDBBtn>
-                            <MDBBtn color="primary" onClick={() => toastr.success("Produto Reservado com sucesso!")}>Save changes</MDBBtn>
+                            <MDBBtn color="secondary" onClick={this.toggleForm}>Fechar</MDBBtn>
+                            <MDBBtn color="primary" onClick={() => toastr.success("Produto Reservado com sucesso!")}>Concluir Reserva</MDBBtn>
                           </MDBModalFooter>
                         </MDBModal>
                     </MDBContainer>
