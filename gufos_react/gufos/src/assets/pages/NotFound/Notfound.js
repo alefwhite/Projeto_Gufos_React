@@ -19,7 +19,7 @@ toastr.options = {
     "onclick": null,
     "showDuration": "300",
     "hideDuration": "1000",
-    "timeOut": "10000",
+    "timeOut": "12000",
     "extendedTimeOut": "1000",
     "showEasing": "swing",
     "hideEasing": "linear",
@@ -258,7 +258,7 @@ class NotFound extends Component {
         .then((response) => {
             console.log("Resp: ", response.data);
             if(response.status === 200) {
-               toastr.success(`Sua reserva foi feita você tera até 5 dias para entrar em contato com a cooperativa ${this.state.Cooperativa}`, response.data.mensagem)
+               toastr.success(`Sua reserva foi feita você tera até 5 dias para entrar em contato com a cooperativa ${this.state.Cooperativa}.`, response.data.mensagem)
             }
             
             this.VerOfertas(this.state.IdProduto);
