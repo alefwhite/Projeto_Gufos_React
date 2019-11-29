@@ -4,7 +4,8 @@ import Header from '../../components/Header/Header';
 import { MDBDataTable, MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,  MDBPagination, MDBPageItem, MDBPageNav, MDBCol, MDBRow } from 'mdbreact'; // MDBInput
 import Axios from 'axios';
 import toastr from 'toastr';
-import produtoImg from '../../img/Agrupar51.png';
+//import produtoImg from '../../img/produtos/Agrupar49.png';
+
 import './produto.css';
 
 
@@ -62,13 +63,7 @@ class NotFound extends Component {
         this.setState({
             modal13: !this.state.modal13
         });
-    }    
-    
-
-    Teste = () => {
-        // Abrir Modal
-        this.toggle();
-    };
+    }
 
      // Antes de carregar nosso Dom
     UNSAFE_componentWillMount() {
@@ -87,7 +82,7 @@ class NotFound extends Component {
       
       //await this.ListarOfertas();
 
-      this.setState({ QtdPaginas : Math.round(this.state.TotalProdutos / this.state.Quantidade_Por_Pagina)});
+      this.setState({ QtdPaginas : Math.ceil(this.state.TotalProdutos / this.state.Quantidade_Por_Pagina)});
       console.log("Qtd: ",this.state.QtdPaginas);
            
       
@@ -191,12 +186,12 @@ class NotFound extends Component {
         this.state.TodasOfertas.map(async function(oferta){
             
             if(oferta.produtoId === id) {
-              let Obj = new Object();
+              let Obj = {} //new Object();
 
               let Telefone = "";
 
               this.state.Telefones.forEach(element => {
-                    if(element.usuarioId == oferta.usuario.usuarioId) {
+                    if(element.usuarioId === oferta.usuario.usuarioId) {
                         Telefone = element.telefone1;
                     }
               });
@@ -206,6 +201,7 @@ class NotFound extends Component {
               Obj.descrição = oferta.descricao;
               Obj.cidade = oferta.cidade;
               Obj.região = oferta.regiao;
+              Obj.preço = "R$: " + oferta.preco;
               Obj.quantidade = oferta.quantidade;
               Obj.validade = new Intl.DateTimeFormat('pt-BR', options).format(Date.parse(oferta.validade))
               Obj.cooperativa = oferta.usuario.nome;
@@ -295,6 +291,12 @@ class NotFound extends Component {
               width: 100
             },
             {
+              label: 'Preço',
+              field: 'preço',
+              sort: 'asc',
+              width: 150
+            },
+            {
               label: 'Quantidade',
               field: 'quantidade',
               sort: 'asc',
@@ -331,13 +333,15 @@ class NotFound extends Component {
                     <form id="produtos" className="produtos_todo" onSubmit={this.VisualizarProduto}>
                         {
                             this.state.ProdutosPorPagina.map(function(produto){
-
+                                
                                 return(
                                     <div className="card_produtos" key={produto.produtoId}>
-                                        <img src={produtoImg}/>
+                                      {/* produto.imagemProduto != null ? produto.imagemProduto : produtoImg                     */}
+                                      {/* produto.imagemProduto && this.PegarImagem(produto.imagemProduto)  */}
+                                        <img src={produto.imagemProduto && require(`../../img/produtos/${produto.imagemProduto}`)} alt="teste"/>
                                         <div className="card_btn">
                                             <label>
-                                                <button type="submit" className="btn2">{produto.produtoId}</button>
+                                                <button type="submit" className="btn2">Fornecer</button>
                                             </label>
                                             <label>
                                                 <button type="submit" className="btn1" onClick={() => this.VerOfertas(produto.produtoId)}>Ver Ofertas</button>

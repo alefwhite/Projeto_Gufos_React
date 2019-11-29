@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&display=swap');
+:root{
+    --fundo:#EFF3F6;
+    --cinza-fonte:#707070;
+    --vermelho:#BF0404;
+    --verde:#89A61F;
+    --laranja:#F29F05;
+}
+
 /*Produtos*/
 
 .container_produto{
@@ -37,8 +46,8 @@ select{
     border:none;
     
 }
-/* 
-.btn{
+
+.btns{
     font-weight: 500;
     border-radius: 4px;
     -webkit-box-shadow: 1px 1px 1px 0px rgba(204,204,204,1);
@@ -49,8 +58,8 @@ select{
     width: 100px;
     height: 30px;
     color:white;
-  }
-  .btn a{
+}
+  .btns a{
     color:white;
     text-decoration: none; 
   }
@@ -60,7 +69,7 @@ select{
     -webkit-box-shadow: 1px 1px 1px 0px rgba(204,204,204,1);
     -moz-box-shadow: 1px 1px 1px 0px rgba(204,204,204,1);
     box-shadow: 1px 1px 1px 0px rgba(204,204,204,1);
-    background-color: var(--laranja);
+    background-color: var(--laranja)!important;
     border:none;
     width: 100px;
     height: 30px;
@@ -72,12 +81,12 @@ select{
     -webkit-box-shadow: 1px 1px 1px 0px rgba(204,204,204,1);
     -moz-box-shadow: 1px 1px 1px 0px rgba(204,204,204,1);
     box-shadow: 1px 1px 1px 0px rgba(204,204,204,1);
-    background-color: var(--verde);
+    background-color: var(--verde)!important;
     border:none;
     width: 100px;
     height: 30px;
     color:white;
-  } */
+  }
   .produtos_todo{
     display: flex;
     justify-content: space-between;

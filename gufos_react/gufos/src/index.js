@@ -24,7 +24,6 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 import './assets/css/toastr.css';
-
 import { usuarioAutenticado, parseJWT } from './services/auth';
 
 const PermissaoAdmin = ({ component: Component }) => (
