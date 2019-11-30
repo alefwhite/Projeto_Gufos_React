@@ -9,22 +9,40 @@ import Contato from '../../components/contato/contato';
 import './produto.css';
 
 
+// toastr.options = {
+//     "closeButton": true,
+//     "debug": false,
+//     "latestOnTop": false,
+//     "progressBar": false,
+//     "positionClass": "toast-top-right",
+//     "preventDuplicates": false,
+//     "onclick": null,
+//     "showDuration": "3000",
+//     "hideDuration": "10000",
+//     "timeOut": "20000",
+//     "extendedTimeOut": "1000",
+//     "showEasing": "swing",
+//     "hideEasing": "linear",
+//     "showMethod": "fadeIn",
+//     "hideMethod": "fadeOut"
+// }
+
 toastr.options = {
-    "closeButton": true,
-    "debug": false,
-    "latestOnTop": false,
-    "progressBar": false,
-    "positionClass": "toast-top-right",
-    "preventDuplicates": false,
-    "onclick": null,
-    "showDuration": "50000",
-    "hideDuration": "10000",
-    "timeOut": "20000",
-    "extendedTimeOut": "50000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut"
+  "closeButton": true,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": true,
+  "positionClass": "toast-top-right",
+  "preventDuplicates": false,
+  "onclick": null,
+  "showDuration": "3000",
+  "hideDuration": "10000",
+  "timeOut": "15000",
+  "extendedTimeOut": "1000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut"
 }
 
 class NotFound extends Component {    
