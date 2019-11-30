@@ -5,7 +5,7 @@ import { MDBDataTable, MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHea
 import Axios from 'axios';
 import toastr from 'toastr';
 //import produtoImg from '../../img/produtos/Agrupar49.png';
-
+import Contato from '../../components/contato/contato';
 import './produto.css';
 
 
@@ -17,10 +17,10 @@ toastr.options = {
     "positionClass": "toast-top-right",
     "preventDuplicates": false,
     "onclick": null,
-    "showDuration": "5000",
-    "hideDuration": "1000",
+    "showDuration": "50000",
+    "hideDuration": "10000",
     "timeOut": "20000",
-    "extendedTimeOut": "5000",
+    "extendedTimeOut": "50000",
     "showEasing": "swing",
     "hideEasing": "linear",
     "showMethod": "fadeIn",
@@ -53,7 +53,14 @@ class NotFound extends Component {
             isLoading : false,
 
             Cooperativa : "",
-            IdOferta : ""
+            IdOferta : "",
+
+            contato : {
+              telefone : "",
+              dados  : ""
+            },
+            
+            ProdutoNome : ""
         }
 
     }
@@ -205,7 +212,7 @@ class NotFound extends Component {
                     }
               });
 
-              Obj.ações = <MDBBtn color="purple" size="sm" onClick={() => this.ReservarProduto(oferta.ofertaId, oferta.usuario.nome)}>Reservar</MDBBtn>;
+              Obj.ações = <MDBBtn color="purple" size="sm" onClick={() => this.ReservarProduto(oferta, Telefone)}>Reservar</MDBBtn>;
               Obj.produto = oferta.produto.nome;
               Obj.descrição = oferta.descricao;
               Obj.cidade = oferta.cidade;
@@ -228,13 +235,17 @@ class NotFound extends Component {
          this.toggle();
     }
 
-    ReservarProduto = (OfertaId, nome) => {
-      console.log("IdOferta: ", OfertaId )
-      console.log("Nome: ", nome)
+    ReservarProduto = (Oferta, Telefone) => {
+      console.log("IdOferta: ", Oferta.ofertaId )
+      console.log("Nome: ", Oferta.usuario.nome)
 
-      this.setState({Cooperativa : nome});
-      this.setState({IdOferta : OfertaId});
-
+      this.setState({Cooperativa : Oferta.usuario.nome});
+      this.setState({IdOferta : Oferta.ofertaId});
+      this.setState({contato : {
+        telefone : Telefone,
+        dados : Oferta
+      }})
+      this.setState({ProdutoNome : Oferta.produto.nome})
       this.toggleForm();      
 
     }
@@ -466,7 +477,7 @@ class NotFound extends Component {
                                   />
                               </MDBModalBody>
                               <MDBModalFooter>
-                                  <MDBBtn color="secondary" onClick={this.toggle}>Fechar</MDBBtn>                                       
+                                  <MDBBtn color="red" onClick={this.toggle}>Fechar</MDBBtn>                                       
                                   {/* <MDBBtn color="primary" type="submit">Salvar</MDBBtn> */}
                               </MDBModalFooter>
                           </MDBModal>
@@ -474,25 +485,24 @@ class NotFound extends Component {
                       </MDBContainer>
                       
                       <MDBContainer>                        
-                        <MDBModal isOpen={this.state.modal13} toggle={this.toggleForm}>
-                          <MDBModalHeader toggle={this.toggle}>Reservar Produto</MDBModalHeader>
-                          <MDBModalBody>
+                        <MDBModal isOpen={this.state.modal13} toggle={this.toggleForm} size="md">
+                          <MDBModalHeader toggle={this.toggle}>Reservar - {this.state.ProdutoNome} <i className="fas fa-shopping-cart"></i></MDBModalHeader>
+                          <MDBModalBody>                                                       
                             <div className="centralizar_">
-
                               <div className="def-number-input number-input">
-                                  <label className="label_prod">Quantidade do produto: </label>
+                                  <label className="label_prod">Quantidade do produto</label><br/>
                                   <button onClick={this.decrease} className="minus"><i className="fas fa-minus"></i></button>
                                   <input className="quantity centralizar_" name="quantity" value={this.state.value} onChange={this.AtulizaValueReserva}
                                   type="number" />
                                   <button onClick={this.increase} className="plus"><i className="fas fa-plus"></i></button>
                               </div>
-
-                            </div>
-                          </MDBModalBody>
-                          <MDBModalFooter>
-                            <MDBBtn color="secondary" onClick={this.toggleForm}>Fechar</MDBBtn>
-                            <MDBBtn color="primary" onClick={() => this.ConcluirReserva()}>Concluir Reserva</MDBBtn>
-                          </MDBModalFooter>
+                            </div>                            
+                            <Contato telefone={this.state.contato.telefone} dados={this.state.contato.dados}/> 
+                          </MDBModalBody>                          
+                          <MDBModalFooter>                           
+                              <MDBBtn color="red" onClick={this.toggleForm}>Fechar</MDBBtn>
+                              <MDBBtn color="purple" onClick={() => this.ConcluirReserva()}>Concluir Reserva</MDBBtn>
+                          </MDBModalFooter>                         
                         </MDBModal>
                     </MDBContainer>
 
