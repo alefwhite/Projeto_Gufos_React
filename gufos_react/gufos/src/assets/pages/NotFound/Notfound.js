@@ -1,43 +1,24 @@
 import React, { Component } from 'react';
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
-import { MDBDataTable, MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,  MDBPagination, MDBPageItem, MDBPageNav, MDBCol, MDBRow } from 'mdbreact'; // MDBInput
+import { MDBDataTable, MDBContainer, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,  MDBPagination, MDBPageItem, MDBPageNav, MDBCol, MDBRow } from 'mdbreact'; // MDBInput
 import Axios from 'axios';
 import toastr from 'toastr';
 //import produtoImg from '../../img/produtos/Agrupar49.png';
 import Contato from '../../components/contato/contato';
 import './produto.css';
 
-
-// toastr.options = {
-//     "closeButton": true,
-//     "debug": false,
-//     "latestOnTop": false,
-//     "progressBar": false,
-//     "positionClass": "toast-top-right",
-//     "preventDuplicates": false,
-//     "onclick": null,
-//     "showDuration": "3000",
-//     "hideDuration": "10000",
-//     "timeOut": "20000",
-//     "extendedTimeOut": "1000",
-//     "showEasing": "swing",
-//     "hideEasing": "linear",
-//     "showMethod": "fadeIn",
-//     "hideMethod": "fadeOut"
-// }
-
 toastr.options = {
   "closeButton": true,
   "debug": false,
-  "newestOnTop": false,
-  "progressBar": true,
+  "newestOnTop": true,
+  "progressBar": false,
   "positionClass": "toast-top-right",
   "preventDuplicates": false,
   "onclick": null,
-  "showDuration": "3000",
-  "hideDuration": "10000",
-  "timeOut": "15000",
+  "showDuration": "300",
+  "hideDuration": "1000",
+  "timeOut": "10000",
   "extendedTimeOut": "1000",
   "showEasing": "swing",
   "hideEasing": "linear",
@@ -66,7 +47,7 @@ class NotFound extends Component {
             ListaOferta : [],
 
             Telefones : [],
-            value: 0,
+            value: "",
             
             isLoading : false,
 
@@ -291,21 +272,24 @@ class NotFound extends Component {
                 ofertaId : this.state.IdOferta
     
             }, config)
-            .then((response) => {
+            .then((response) => {                  
                 console.log("Resp: ", response.data);
                 if(response.status === 200) {
-                  toastr.success(`Sua reserva foi feita você tera até 5 dias para entrar em contato com a cooperativa ${this.state.Cooperativa}.`, response.data.mensagem)
+                  toastr.success(`Sua reserva foi feita você tera até 5 dias para entrar em contato com a cooperativa ${this.state.Cooperativa}.`, response.data.mensagem);                  
+                  this.VerOfertas(this.state.IdProduto);
+                  this.toggle();
+                  // Fechar Form
+                  this.toggleForm();
+
+                } else {
+                  toastr.info(response.data.mensagem + ".", "Atenção!");
                 }
-                
-                this.VerOfertas(this.state.IdProduto);
-                this.toggle();
-                // Fechar Form
-                this.toggleForm();
+
     
             })
             .catch((erro) => {
-              console.log(erro);
-              toastr.error("Não foi possível efetuar sua reservar")
+              console.log(erro.status);
+              toastr.error("Não foi possível efetuar sua reserva")
             })
         }
         else {
@@ -567,7 +551,7 @@ class NotFound extends Component {
                       
                       <MDBContainer>                        
                         <MDBModal isOpen={this.state.modal13} toggle={this.toggleForm} size="md">
-                          <MDBModalHeader toggle={this.toggle}>Reservar - {this.state.ProdutoNome} <i className="fas fa-shopping-cart"></i></MDBModalHeader>
+                          <MDBModalHeader toggle={this.toggleForm}>Reservar - {this.state.ProdutoNome} <i className="fas fa-shopping-cart"></i></MDBModalHeader>
                           <MDBModalBody>                                                       
                             <div className="centralizar_">
                               <div className="def-number-input number-input">
