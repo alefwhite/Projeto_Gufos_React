@@ -236,7 +236,8 @@ class NotFound extends Component {
                     }
               });
 
-              Obj.ações = <MDBBtn color="purple" size="sm" onClick={() => this.ReservarProduto(oferta, Telefone)}>Reservar</MDBBtn>;
+              // Obj.ações = <MDBBtn color="purple" size="sm" onClick={() => this.ReservarProduto(oferta, Telefone)}>Reservar</MDBBtn>;
+              Obj.ações = <button className="btns1" onClick={() => this.ReservarProduto(oferta, Telefone)}>Reservar</button>;
               Obj.produto = oferta.produto.nome;
               Obj.descrição = oferta.descricao;
               Obj.cidade = oferta.cidade;
@@ -503,7 +504,7 @@ class NotFound extends Component {
                      </form>   
                      <MDBRow className="mdbRow">
                             <MDBCol>
-                                <MDBPagination className="mb-5" color="red">
+                                <MDBPagination className="mb-5" color="red" >
                                 <MDBPageItem onClick={() => this.SetPg(1)}>
                                     <MDBPageNav aria-label="Previous">
                                       <span aria-hidden="true" >Primeira</span>
@@ -536,18 +537,29 @@ class NotFound extends Component {
                           <MDBModal isOpen={this.state.modal} toggle={this.toggle} size="fluid">
                           <MDBModalHeader toggle={this.toggle}>Ofertas</MDBModalHeader>
                               <MDBModalBody>
-                                  <MDBDataTable
-                                      scrollX
+                                  <MDBDataTable                                      
+                                      responsive                                        
                                       striped
                                       bordered
                                       small
                                       hover
+                                      barReverse
+                                      entriesLabel = "Mostrar entradas"
+                                      infoLabel={["Mostrando de", "até", "de", "registros"]}
+                                      paginationLabel={["Anterior", "Próximo"]}
+                                      searchLabel="Procurar"
+                                      theadColor="dark"                                      
+                                      theadTextWhite 
+                                      entries={5}
+                                      entriesOptions={[ 5, 10, 15, 20]}                                       
+                                      noRecordsFoundLabel="Zero records to render"
                                       data={data}
                                   />
                               </MDBModalBody>
                               <MDBModalFooter>
-                                  <MDBBtn color="red" onClick={this.toggle}>Fechar</MDBBtn>                                       
+                                  {/* <MDBBtn color="warning" onClick={this.toggle}>Fechar</MDBBtn>                                        */}
                                   {/* <MDBBtn color="primary" type="submit">Salvar</MDBBtn> */}
+                                  <button className="btns_fechar" onClick={this.toggle}>Fechar</button>
                               </MDBModalFooter>
                           </MDBModal>
                           
@@ -569,8 +581,10 @@ class NotFound extends Component {
                             <Contato telefone={this.state.contato.telefone} dados={this.state.contato.dados}/> 
                           </MDBModalBody>                          
                           <MDBModalFooter>                           
-                              <MDBBtn color="red" onClick={this.toggleForm}>Fechar</MDBBtn>
-                              <MDBBtn color="purple" onClick={() => this.ConcluirReserva()}>Concluir Reserva</MDBBtn>
+                              {/* <MDBBtn color="warning" onClick={this.toggleForm}>Fechar</MDBBtn> */}
+                              {/* <MDBBtn color="purple" onClick={() => this.ConcluirReserva()}>Concluir Reserva</MDBBtn> */}
+                              <button className="btns_fechar" onClick={this.toggleForm}>Fechar</button>
+                              <button className="btns_concluir" onClick={() => this.ConcluirReserva()}>Efetivar</button>
                           </MDBModalFooter>                         
                         </MDBModal>
                     </MDBContainer>

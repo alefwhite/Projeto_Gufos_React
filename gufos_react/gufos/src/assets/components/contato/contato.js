@@ -87,21 +87,21 @@ const ContactPage = (props) => {
           
           <MDBRow className="text-center">
             <MDBCol md="4">
-              <MDBBtn tag="a" floating color="blue" className="accent-1">
+              <MDBBtn tag="a" floating color="dark" className="accent-1">
                 <MDBIcon icon="map-marker-alt" />
               </MDBBtn>
               <p>{props.dados.cidade}</p>
               <p className="mb-md-0">Região: {props.dados.regiao}</p>
             </MDBCol>
             <MDBCol md="4">
-              <MDBBtn tag="a" floating color="blue" className="accent-1">
+              <MDBBtn tag="a" floating color="dark" className="accent-1">
                 <MDBIcon icon="phone" />
               </MDBBtn>
               <p>{props.telefone}</p>
               <p className="mb-md-0">Seg - Sex, 8:00-22:00</p>
             </MDBCol>
             <MDBCol md="4">
-              <MDBBtn tag="a" floating color="blue" className="accent-1">
+              <MDBBtn tag="a" floating color="dark" className="accent-1">
                 <MDBIcon icon="envelope" />
               </MDBBtn>
               <p>{props.dados.usuario.email}</p>
