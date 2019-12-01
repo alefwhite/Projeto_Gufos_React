@@ -320,11 +320,23 @@ class NotFound extends Component {
     }
 
     renderPagina = (row) => {
-      return  <MDBPageItem onClick={() => this.SetPg(row)} key={row}>
-                <MDBPageNav>
-                    {row}
-                </MDBPageNav>
-              </MDBPageItem>         
+      if(row === this.state.Pg){
+        return  <MDBPageItem onClick={() => this.SetPg(row)} key={row} active>
+                  <MDBPageNav>
+                      {row}
+                  </MDBPageNav>
+                </MDBPageItem>  
+         
+      } else {
+        return  <MDBPageItem onClick={() => this.SetPg(row)} key={row}>
+                  <MDBPageNav>
+                      {row}
+                  </MDBPageNav>
+                </MDBPageItem>         
+
+      }
+
+
     }
 
     decrease = () => {
@@ -453,9 +465,9 @@ class NotFound extends Component {
                      <MDBRow>
                             <MDBCol>
                                 <MDBPagination className="mb-5" color="red">
-                                <MDBPageItem>
+                                <MDBPageItem onClick={() => this.SetPg(1)}>
                                     <MDBPageNav aria-label="Previous">
-                                    <span aria-hidden="true">Anterior</span>
+                                      <span aria-hidden="true" >Primeira</span>
                                     </MDBPageNav>
                                 </MDBPageItem>
                                     {
@@ -469,9 +481,9 @@ class NotFound extends Component {
                                           1
                                         </MDBPageNav>
                                     </MDBPageItem>                                                                 */}
-                                <MDBPageItem>
+                                <MDBPageItem onClick={() => this.SetPg(this.state.QtdPaginas)}>
                                     <MDBPageNav aria-label="Previous">
-                                    <span aria-hidden="true">Próximo</span>
+                                    <span aria-hidden="true">Última</span>
                                     </MDBPageNav>
                                 </MDBPageItem>
                                 </MDBPagination>
