@@ -78,7 +78,13 @@ class NotFound extends Component {
               dados  : ""
             },
             
-            ProdutoNome : ""
+            ProdutoNome : "",
+
+            filtrarOferta : {
+              cidade : "Selecionar cidade",
+              regiao : "Selecionar região",
+              validade : "Selecionar validade"
+            }
         }
 
     }
@@ -438,6 +444,39 @@ class NotFound extends Component {
                 <Header/>
                 
                 <div className="container_produto">
+                    <form method="get" id="formde_busca" className="espaço_busca">
+                      <label>
+                          <input input type="text" placeholder="Digite o produto..." className="form_busca"
+                              aria-label="buscar produto"/>
+                      </label>
+
+                    </form>
+
+                    <form method="GET" id="formde_filtro" className="filtro">
+                        <select name="cidade" value={this.state.filtrarOferta.cidade}>
+                            <option value="Selecionar cidade" disabled>Selecionar cidade</option>
+                            <option value="São Paulo">São Paulo</option>                            
+                        </select>
+                        <select name="regiao" value={this.state.filtrarOferta.regiao}>
+                            <option value="Selecionar região" disabled>Selecionar região</option>
+                            <option value="norte">Região Norte</option>
+                            <option value="sul">Região Sul</option>
+                            <option value="leste">Região Leste</option>
+                            <option value="oeste">Região Oeste</option>
+                            <option value="central">Região Central</option>
+                        </select>
+                        <select name="validade" value={this.state.filtrarOferta.validade}>
+                            <option value="Selecionar validade" disabled>Selecionar validade</option>
+                            <option value={5}>Até 5 dias</option>
+                            <option value={10}>Até 10 dias</option>
+                            <option value={15}>Até 15 dias</option>
+                            <option value={20}>Até 20 dias</option>
+                        </select>
+                        <label>
+                            <button type="submit" className="btns">Filtrar</button>
+                        </label>
+                      </form>
+
                     <form id="produtos" className="produtos_todo" onSubmit={this.VisualizarProduto}>
                         {
                             this.state.ProdutosPorPagina.map(function(produto){
@@ -462,7 +501,7 @@ class NotFound extends Component {
                         }
                        
                      </form>   
-                     <MDBRow>
+                     <MDBRow className="mdbRow">
                             <MDBCol>
                                 <MDBPagination className="mb-5" color="red">
                                 <MDBPageItem onClick={() => this.SetPg(1)}>
