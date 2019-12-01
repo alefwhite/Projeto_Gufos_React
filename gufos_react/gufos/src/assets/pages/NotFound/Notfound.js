@@ -347,16 +347,16 @@ class NotFound extends Component {
 
     decrease = () => {
       if(this.state.value > 0) {
-        this.setState({ value: parseInt(this.state.value - 1 )});
+        this.setState({ value: parseFloat(this.state.value - 1 )});
       }
     }
   
     increase = () => {
-      this.setState({ value: parseInt(this.state.value + 1) });
+      this.setState({ value: parseFloat(this.state.value + 1) });
     }
     
     AtulizaValueReserva = (input) => {
-      this.setState({ value : parseInt(input.target.value)});
+      this.setState({ value : parseFloat(input.target.value)});
     }
 
    
