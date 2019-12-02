@@ -344,6 +344,19 @@ class NotFound extends Component {
       this.setState({ value : parseFloat(input.target.value)});
     }
 
+    // Utilizamos para atualizar os states dos inputs
+    AtualizaFiltroOferta = (input) => {
+
+      this.setState({ 
+        filtrarOferta : {
+          ...this.state.filtrarOferta, [input.target.name] : input.target.value }
+      }); 
+      
+      console.log(this.state.filtrarOferta.cidade);
+      console.log(this.state.filtrarOferta.regiao);
+      console.log(this.state.filtrarOferta.validade);
+     
+    }
    
     render(){
 
@@ -438,11 +451,11 @@ class NotFound extends Component {
                     </form>
 
                     <form method="GET" id="formde_filtro" className="filtro">
-                        <select name="cidade" value={this.state.filtrarOferta.cidade}>
+                        <select name="cidade" value={this.state.filtrarOferta.cidade} onChange={this.AtualizaFiltroOferta}>
                             <option value="Selecionar cidade" disabled>Selecionar cidade</option>
                             <option value="São Paulo">São Paulo</option>                            
                         </select>
-                        <select name="regiao" value={this.state.filtrarOferta.regiao}>
+                        <select name="regiao" value={this.state.filtrarOferta.regiao} onChange={this.AtualizaFiltroOferta}>
                             <option value="Selecionar região" disabled>Selecionar região</option>
                             <option value="norte">Região Norte</option>
                             <option value="sul">Região Sul</option>
@@ -450,7 +463,7 @@ class NotFound extends Component {
                             <option value="oeste">Região Oeste</option>
                             <option value="central">Região Central</option>
                         </select>
-                        <select name="validade" value={this.state.filtrarOferta.validade}>
+                        <select name="validade" value={this.state.filtrarOferta.validade} onChange={this.AtualizaFiltroOferta}>
                             <option value="Selecionar validade" disabled>Selecionar validade</option>
                             <option value={5}>Até 5 dias</option>
                             <option value={10}>Até 10 dias</option>
@@ -571,9 +584,7 @@ class NotFound extends Component {
                               <button className="btns_concluir" onClick={() => this.ConcluirReserva()}>Efetivar</button>
                           </MDBModalFooter>                         
                         </MDBModal>
-                    </MDBContainer>
-
-                      
+                    </MDBContainer>                     
 
                   </div>
                 <Footer/>
