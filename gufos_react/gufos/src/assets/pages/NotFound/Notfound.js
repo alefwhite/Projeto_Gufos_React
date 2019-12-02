@@ -411,7 +411,7 @@ class NotFound extends Component {
             };
             
             this.state.TodasOfertas.map(async function(oferta){
-                console.log("Oferta: ", oferta)
+                console.log("Oferta Modal: ", oferta)
                
                   let Obj = {} //new Object();
     
