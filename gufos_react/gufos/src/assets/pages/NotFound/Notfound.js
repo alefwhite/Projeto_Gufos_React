@@ -7,6 +7,7 @@ import toastr from 'toastr';
 //import produtoImg from '../../img/produtos/Agrupar49.png';
 import Contato from '../../components/contato/contato';
 import './produto.css';
+import {Link} from 'react-router-dom';
 
 toastr.options = {
   "closeButton": true,
@@ -62,9 +63,10 @@ class NotFound extends Component {
             ProdutoNome : "",
 
             filtrarOferta : {
-              cidade : "Selecionar cidade",
-              regiao : "Selecionar região",
-              validade : "Selecionar validade"
+              produto : "",
+              cidade : "",
+              regiao : "",
+              validade : ""
             }
         }
 
@@ -192,9 +194,9 @@ class NotFound extends Component {
   
    async VerOfertas(id) {
         // Abrir Modal
-         console.log("Id do Produto: ", id);
-         this.setState({IdProduto : id});
-         await this.ListarOfertas();
+        console.log("Id do Produto: ", id);
+        this.setState({IdProduto : id});
+        await this.ListarOfertas();
         
         let OfertaFiltrada = [];
 
@@ -355,7 +357,103 @@ class NotFound extends Component {
       console.log(this.state.filtrarOferta.cidade);
       console.log(this.state.filtrarOferta.regiao);
       console.log(this.state.filtrarOferta.validade);
+      console.log(this.state.filtrarOferta.validade);
+      
      
+    }
+
+    FiltrarOferta = (event) => {
+      event.preventDefault();
+      console.log("Filtrando Oferta");
+      
+      let config = {
+        headers: {
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin":"*" // Cors
+        }
+       }
+
+      
+      //  fetch("http://localhost:5000/api/filtro",{
+      //     method: "GET",
+      //     headers: {
+      //         "Content-Type": "application/json"
+      //     },
+      //     body : JSON.stringify({
+      //       produto : 'b'            
+      //     })
+      //  })
+      //   .then(response => response.json())
+      //   .then(data => {
+      //       console.log(data)
+      //     })
+      //   .catch(error => console.log(error));       
+            
+       Axios.post("http://localhost:5000/api/filtro",{
+            produto : this.state.filtrarOferta.produto,
+            // regiao : this.state.filtrarOferta.regiao,
+            // cidade : this.state.filtrarOferta.cidade,
+            // validade : this.state.filtrarOferta.validade,
+       }, config)
+        .then(response => {
+          console.log("Ofertas filtro: ", response.data);          
+          
+          if(response.status === 200) {
+
+            this.setState({TodasOfertas : response.data});
+
+            let OfertaFiltrada = [];
+
+            let options = {
+              year: 'numeric', month: 'numeric', day: 'numeric',         
+              hour12: false,
+              timeZone: 'America/Sao_Paulo' 
+            };
+            
+            this.state.TodasOfertas.map(async function(oferta){
+                console.log("Oferta: ", oferta)
+               
+                  let Obj = {} //new Object();
+    
+                  let Telefone = "";
+                  let Coooperativa = "";
+
+
+                  console.log("telefones", this.state.Telefones)
+    
+                  this.state.Telefones.forEach(element => {
+                        if(element.usuarioId === oferta.usuarioId) {
+                            Telefone = element.telefone1;
+                            Coooperativa = element.usuario.nome;
+                        }
+                  });    
+                 
+                  Obj.ações = <button className="btns1" onClick={() => this.ReservarProduto(oferta, Telefone)}>Reservar</button>;
+                  Obj.produto = oferta.produto.nome;
+                  Obj.descrição = oferta.descricao;
+                  Obj.cidade = oferta.cidade;
+                  Obj.região = oferta.regiao;
+                  Obj.preço = "R$: " + oferta.preco;
+                  Obj.quantidade = oferta.quantidade;
+                  Obj.validade = new Intl.DateTimeFormat('pt-BR', options).format(Date.parse(oferta.validade))
+                  Obj.cooperativa = Coooperativa;//oferta.usuario.nome;
+                  Obj.contato = Telefone;
+    
+                  OfertaFiltrada.push(Obj);
+                  this.setState({ListaOferta : ""})
+    
+             }.bind(this));
+            
+            
+             this.setState({ListaOferta : OfertaFiltrada});
+             
+             this.toggle();
+          }
+
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
    
     render(){
@@ -444,13 +542,18 @@ class NotFound extends Component {
                 <div className="container_produto">
                     <form method="get" id="formde_busca" className="espaço_busca">
                       <label>
-                          <input input type="text" placeholder="Digite o produto..." className="form_busca"
-                              aria-label="buscar produto"/>
+                          <input 
+                              input type="text" 
+                              placeholder="Digite o produto..." 
+                              className="form_busca"
+                              aria-label="buscar produto"
+                              onChange={this.AtualizaFiltroOferta}
+                          />
                       </label>
 
                     </form>
 
-                    <form method="GET" id="formde_filtro" className="filtro">
+                    <form id="formde_filtro" className="filtro" onSubmit={this.FiltrarOferta}>
                         <select name="cidade" value={this.state.filtrarOferta.cidade} onChange={this.AtualizaFiltroOferta}>
                             <option value="Selecionar cidade" disabled>Selecionar cidade</option>
                             <option value="São Paulo">São Paulo</option>                            
