@@ -341,12 +341,12 @@ class NotFound extends Component {
 
     decrease = () => {
       if(this.state.value > 0) {
-        this.setState({ value: parseFloat(this.state.value - 1 )});
+        this.setState({ value: parseFloat(this.state.value - 0.500 )});
       }
     }
   
     increase = () => {
-      this.setState({ value: parseFloat(this.state.value + 1) });
+      this.setState({ value: parseFloat(this.state.value + 0.500) });
     }
     
     AtulizaValueReserva = (input) => {
@@ -438,6 +438,9 @@ class NotFound extends Component {
             this.setState({ListaOferta : OfertaFiltrada});
             
             this.toggle();
+         } else {
+           toastr.warning(response.data.mensagem, "Desculpe :(")
+           console.log("Ret: ", response.data);
          }
 
        })
