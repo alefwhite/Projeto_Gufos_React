@@ -228,8 +228,8 @@ class NotFound extends Component {
               Obj.descrição = oferta.descricao;
               Obj.cidade = oferta.cidade;
               Obj.região = oferta.regiao;
-              Obj.preço = "R$: " + oferta.preco;
-              Obj.quantidade = oferta.quantidade;
+              Obj.preço = "R$: " + oferta.preco.toFixed(2);
+              Obj.quantidade = oferta.quantidade.toFixed(3) + " Kg";
               Obj.validade = new Intl.DateTimeFormat('pt-BR', options).format(Date.parse(oferta.validade))
               Obj.cooperativa = oferta.usuario.nome;
               Obj.contato = Telefone;
@@ -288,7 +288,7 @@ class NotFound extends Component {
                 if(response.status === 200) {
                   toastr.success(`Sua reserva foi feita você tera até 5 dias para entrar em contato com a cooperativa ${this.state.Cooperativa}.`, response.data.mensagem);                  
                   
-                  if(this.setState.filtrado === false){
+                  if(this.state.filtrado === false) {                   
                       this.VerOfertas(this.state.IdProduto);
                       this.toggle();
                       // Fechar Form
@@ -297,15 +297,21 @@ class NotFound extends Component {
                   } else {                     
                       // Fechar Form
                       this.toggleForm();
+                      
+                      // Fechar Datable
                       this.toggle();
-                      //document.getElementById("formde_filtro").onSubmit();
+                      
+                      //
+                      
+                      if(this.state.filtrado === true) {
+                        this.FiltrarOferta();
+                      }
                   }
 
 
                 } else {
                   toastr.info(response.data.mensagem + ".", "Atenção!");
-                }
-
+                }                  
     
             })
             .catch((erro) => {
@@ -316,6 +322,8 @@ class NotFound extends Component {
         else {
           toastr.info("A quantidade não foi informada.", "Atenção!");
         }
+
+
     }
     
 
@@ -353,12 +361,12 @@ class NotFound extends Component {
 
     decrease = () => {
       if(this.state.value > 0) {
-        this.setState({ value: parseFloat(this.state.value - 0.500 )});
+        this.setState({ value: parseFloat(this.state.value - 0.500)});
       }
     }
   
     increase = () => {
-      this.setState({ value: parseFloat(this.state.value + 0.500) });
+      this.setState({ value: parseFloat(this.state.value + 0.500)});
     }
     
     AtulizaValueReserva = (input) => {
@@ -376,7 +384,11 @@ class NotFound extends Component {
     }
 
   FiltrarOferta = (event) => {
-      event.preventDefault();
+
+      if(this.state.filtrado === false) {
+        event.preventDefault();
+      }
+
       console.log("Filtrando Oferta");
       
       let config = {
@@ -435,14 +447,14 @@ class NotFound extends Component {
                  Obj.descrição = oferta.descricao;
                  Obj.cidade = oferta.cidade;
                  Obj.região = oferta.regiao;
-                 Obj.preço = "R$: " + oferta.preco;
-                 Obj.quantidade = oferta.quantidade;
+                 Obj.preço = "R$: " + oferta.preco.toFixed(2);
+                 Obj.quantidade = oferta.quantidade.toFixed(3) + " Kg";
                  Obj.validade = new Intl.DateTimeFormat('pt-BR', options).format(Date.parse(oferta.validade))
                  Obj.cooperativa = Coooperativa;//oferta.usuario.nome;
                  Obj.contato = Telefone;
    
                  OfertaFiltrada.push(Obj);
-                 this.setState({ListaOferta : ""})
+                 //this.setState({ListaOferta : ""})
    
             }.bind(this));
            
@@ -493,8 +505,6 @@ class NotFound extends Component {
       for(let i = 0; i < this.state.QtdPaginas; i++) {      
           paginas.push(i + 1);
       }      
-
-      //console.log("Dentro do Render: ",this.state.ListaOferta);
 
       const data = {
 
@@ -707,7 +717,7 @@ class NotFound extends Component {
                                   <label className="label_prod">Quantidade do produto</label><br/>
                                   <button onClick={this.decrease} className="minus"><i className="fas fa-minus"></i></button>
                                   <input className="quantity centralizar_" name="quantity" value={this.state.value} onChange={this.AtulizaValueReserva}
-                                  type="number" />
+                                  type="number" step={0.500} min={0}/>
                                   <button onClick={this.increase} className="plus"><i className="fas fa-plus"></i></button>
                               </div>
                             </div>                            
