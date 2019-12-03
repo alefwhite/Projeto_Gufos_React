@@ -444,8 +444,12 @@ class NotFound extends Component {
          }
 
        })
-       .catch(error => {
-         console.log(error);
+       .catch((error) => {
+          console.log("erro ",error.response);
+          if(error.response.status === 404) {
+            toastr.warning(error.response.data.mensagem+".", "Desculpe :(");
+
+          }
        });
 
     } else {
