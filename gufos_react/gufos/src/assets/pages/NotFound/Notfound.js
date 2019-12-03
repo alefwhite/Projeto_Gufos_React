@@ -366,7 +366,7 @@ class NotFound extends Component {
     }
   
     increase = () => {
-      this.setState({ value: parseFloat(this.state.value + 0.500)});
+      this.setState({ value: parseFloat(this.state.value + 0.500)});     
     }
     
     AtulizaValueReserva = (input) => {
