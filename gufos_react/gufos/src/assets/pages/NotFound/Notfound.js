@@ -239,9 +239,15 @@ class NotFound extends Component {
 
          }.bind(this));
         
-         this.setState({ListaOferta : OfertaFiltrada});
-         
-         this.toggle();
+         if(OfertaFiltrada.length !== 0){
+
+           this.setState({ListaOferta : OfertaFiltrada});
+           
+           this.toggle();
+
+         } else {
+           toastr.info("Esse produto não está sendo ofertado no momento!", "Desculpe :( ");
+         }
     }
 
     ReservarProduto = (Oferta, Telefone) => {
