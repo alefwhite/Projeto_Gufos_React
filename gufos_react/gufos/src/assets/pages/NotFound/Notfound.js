@@ -68,7 +68,9 @@ class NotFound extends Component {
               cidade : "Selecionar cidade",
               regiao : "Selecionar região",
               validade : "Selecionar validade"
-            }
+            },
+
+            filtrado : false
         }
 
     }
@@ -285,10 +287,20 @@ class NotFound extends Component {
                 console.log("Resp: ", response.data);
                 if(response.status === 200) {
                   toastr.success(`Sua reserva foi feita você tera até 5 dias para entrar em contato com a cooperativa ${this.state.Cooperativa}.`, response.data.mensagem);                  
-                  this.VerOfertas(this.state.IdProduto);
-                  this.toggle();
-                  // Fechar Form
-                  this.toggleForm();
+                  
+                  if(this.setState.filtrado === false){
+                      this.VerOfertas(this.state.IdProduto);
+                      this.toggle();
+                      // Fechar Form
+                      this.toggleForm();
+
+                  } else {                     
+                      // Fechar Form
+                      this.toggleForm();
+                      this.toggle();
+                      //document.getElementById("formde_filtro").onSubmit();
+                  }
+
 
                 } else {
                   toastr.info(response.data.mensagem + ".", "Atenção!");
@@ -363,7 +375,7 @@ class NotFound extends Component {
      
     }
 
-    FiltrarOferta = (event) => {
+  FiltrarOferta = (event) => {
       event.preventDefault();
       console.log("Filtrando Oferta");
       
@@ -436,8 +448,11 @@ class NotFound extends Component {
            
            
             this.setState({ListaOferta : OfertaFiltrada});
-            
+
+            this.setState({filtrado : true});
+
             this.toggle();
+
          } else {
            toastr.warning(response.data.mensagem, "Desculpe :(")
            console.log("Ret: ", response.data);
@@ -455,12 +470,23 @@ class NotFound extends Component {
     } else {
       toastr.info("Filtros vazios.", "Atenção!");
     }
+  }
 
+  LimparFiltros = () => {
 
+      this.setState({ filtrarOferta : {
+        produto : "", // Definir como vazio para validar quando o usuario clicar no filtrar sem informar os filtros
+        cidade : "Selecionar cidade",
+        regiao : "Selecionar região",
+        validade : "Selecionar validade"
+      }});
+      
+      this.setState({filtrado : false});
+      this.toggle();    
 
-}
+  }
    
-    render(){
+  render(){
 
       let paginas = [];
      
@@ -547,11 +573,13 @@ class NotFound extends Component {
                     <form method="get" id="formde_busca" className="espaço_busca">
                       <label>
                           <input 
-                              input type="text" 
+                              input type="text"
+                              id="nomeProduto" 
                               placeholder="Digite o produto..." 
                               className="form_busca"
                               aria-label="buscar produto"
                               name = "produto"
+                              value = {this.state.filtrarOferta.produto}
                               onChange={this.AtualizaFiltroOferta}
                           />
                       </label>
@@ -579,7 +607,7 @@ class NotFound extends Component {
                             <option value={20}>Até 20 dias</option>
                         </select>
                         <label>
-                            <button type="submit" className="btns">Filtrar</button>
+                            <button type="submit" className="btns" id="filtro">Filtrar</button>
                         </label>
                       </form>
 
@@ -640,7 +668,7 @@ class NotFound extends Component {
                       <MDBContainer>                           
                           
                           <MDBModal isOpen={this.state.modal} toggle={this.toggle} size="fluid">
-                          <MDBModalHeader toggle={this.toggle}>Ofertas</MDBModalHeader>
+                          <MDBModalHeader toggle={() => this.LimparFiltros()}>Ofertas</MDBModalHeader>
                               <MDBModalBody>
                                   <MDBDataTable                                      
                                       responsive                                        
@@ -664,7 +692,7 @@ class NotFound extends Component {
                               <MDBModalFooter>
                                   {/* <MDBBtn color="warning" onClick={this.toggle}>Fechar</MDBBtn>                                        */}
                                   {/* <MDBBtn color="primary" type="submit">Salvar</MDBBtn> */}
-                                  <button className="btns_fechar" onClick={this.toggle}>Fechar</button>
+                                  <button className="btns_fechar" onClick={() => this.LimparFiltros()}>Fechar</button>
                               </MDBModalFooter>
                           </MDBModal>
                           
